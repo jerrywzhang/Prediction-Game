@@ -1,6 +1,11 @@
 // Author: Jerry Zhang
 
 // Variables
+var PROBABILITIES = [.7, .3, .3]; // Left, Center, Right
+
+
+
+
 var WINDOW_WIDTH = 600;
 var WINDOW_HEIGHT = 600;
 var BG_IMAGE = "http://wallpapercave.com/wp/MuIV2JN.jpg" // unused
@@ -84,27 +89,33 @@ var render = function() {
 };
 
 Ball.prototype.update = function(basket) {
-  this.x += this.x_speed;
-  this.y += this.y_speed;
+  if (this.y <= WINDOW_HEIGHT/2) {
+    this.x += this.x_speed;
+    this.y += this.y_speed;
+  } else {
+    console.log("DOWN!")
+  }
+
+
   var top_x = this.x - BALL_RADIUS;
   var top_y = this.y - BALL_RADIUS;
   var bottom_x = this.x + BALL_RADIUS;
   var bottom_y = this.y + BALL_RADIUS;
 
-  if(this.x - BALL_RADIUS < 0) { // hitting the left wall
-    this.x = BALL_RADIUS;
-    this.x_speed = -this.x_speed;
-  } else if(this.x + BALL_RADIUS > WINDOW_WIDTH) { // hitting the right wall
-    this.x = WINDOW_WIDTH - BALL_RADIUS;
-    this.x_speed = -this.x_speed;
-  }
+  // if(this.x - BALL_RADIUS < 0) { // hitting the left wall
+  //   this.x = BALL_RADIUS;
+  //   this.x_speed = -this.x_speed;
+  // } else if(this.x + BALL_RADIUS > WINDOW_WIDTH) { // hitting the right wall
+  //   this.x = WINDOW_WIDTH - BALL_RADIUS;
+  //   this.x_speed = -this.x_speed;
+  // }
 
-  if(this.y < 0 || this.y > WINDOW_HEIGHT) { // a point was scored
-    this.x_speed = 0;
-    this.y_speed = BASE_SPEED_Y;
-    this.x = WINDOW_WIDTH/2;
-    this.y = 25;
-  }
+  // if(this.y < 0 || this.y > WINDOW_HEIGHT) { // a point was scored
+  //   this.x_speed = 0;
+  //   this.y_speed = BASE_SPEED_Y;
+  //   this.x = WINDOW_WIDTH/2;
+  //   this.y = 25;
+  // }
 
   if(top_y > 300) {
     if(top_y < (basket.y + basket.height) && bottom_y > basket.y && top_x < (basket.x + basket.width) && bottom_x > basket.x) {
