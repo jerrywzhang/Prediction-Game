@@ -1,18 +1,16 @@
 // Author: Jerry Zhang
 
-// Variables
-var PROBABILITIES = [.7, .3, .3]; // Left, Center, Right
+// Variables to change
 
 
 
-
+// Code starts here
 var WINDOW_WIDTH = 600;
 var WINDOW_HEIGHT = 600;
 var BG_IMAGE = "http://wallpapercave.com/wp/MuIV2JN.jpg" // unused
 var BASE_SPEED_Y = 20;
 var BALL_RADIUS = 25;
 
-// Code
 var animate = window.requestAnimationFrame ||
   window.webkitRequestAnimationFrame ||
   window.mozRequestAnimationFrame ||
@@ -93,7 +91,7 @@ Ball.prototype.update = function(basket) {
     this.x += this.x_speed;
     this.y += this.y_speed;
   } else {
-    console.log("DOWN!")
+    // console.log("DOWN!")
   }
 
 
