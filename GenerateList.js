@@ -1,12 +1,4 @@
 // Author: Jerry Zhang
-var file = 'https://gist.githubusercontent.com/thejwzhang/af7517ff59667192288320db2205f6f8/raw/50e29433823b3746a5120e382a8604ef4d764189/Probabilities.txt'
-
-var NUM_TRIES = 200;
-var NUM_CMD = 4;
-
-var finalProbabilitiesList = [];
-var outcomesArray = [];
-var done = false;
 
 function readFile(callback) {
   var txtFile = new XMLHttpRequest();
@@ -60,7 +52,7 @@ function createOutcomes(linesFromFile, callback) {
     } // end if (currentLine)
   } // end for (var i in linesFromFile)
 
-  if (lines.length != NUM_CMD*NUMBER_OF_POSSIBLE_OUTCOMES) {
+  if (lines.length != NUMBER_OF_DIFFERENT_PROBABILITIES*NUMBER_OF_POSSIBLE_OUTCOMES) {
     console.log("ERROR: Not enough lines");
     alert("ERROR: Not enough lines! Check the probabilities.txt file!")
   }
@@ -72,7 +64,7 @@ function createOutcomes(linesFromFile, callback) {
     var count1 = 0;
     var count2 = 0;
     var count3 = 0;
-    for (j = 0; j < (NUM_TRIES/NUM_CMD); j++) {
+    for (j = 0; j < (NUMBER_OF_TOTAL_TRIES/NUMBER_OF_DIFFERENT_PROBABILITIES); j++) {
       var currentVal = Math.random();
       if (currentVal < finalProbabilitiesList[i]) {
         outcomesArray.push(1);
@@ -90,7 +82,6 @@ function createOutcomes(linesFromFile, callback) {
   }
 
   // console.log(outcomesArray);
-
   done = true;
   callback(done);
 }
