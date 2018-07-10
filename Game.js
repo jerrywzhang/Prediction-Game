@@ -31,168 +31,135 @@ var timePressed = 0;
 var keyPressed = 0;
 
 document.addEventListener("keyup", function(event) {
-    if (event.keyCode == 49) {
-      console.log("HI!");
-      timePressed = performance.now();
-      console.log(timePressed);
-    } else if (event.keyCode == 50) {
-      console.log("HI!");
-      timePressed = performance.now();
-      console.log(timePressed);
-    } else if (event.keyCode == 51) {
-      console.log("HI!");
-      timePressed = performance.now();
-      console.log(timePressed);
+    timePressed = performance.now();
+    if (event.keyCode == 49 || event.keyCode == 97) {
+      console.log("1 Pressed");
+      keyPressed = 1;
+
+    } else if (event.keyCode == 50 || event.keyCode == 98) {
+      console.log("2 Pressed");
+      keyPressed = 2;
+    } else if (event.keyCode == 51 || event.keyCode == 99) {
+      console.log("3 Pressed");
+      keyPressed = 3;
+    } else if (event.keyCode == 13) {
+      console.log("enter");
     } else {
-      console.log(event.keyCode);
-      timePressed = performance.now();
-      console.log(timePressed);
+      console.log("Key Number " + event.keyCode + " Pressed");
+      keyPressed = 0;
     }
-    keyPressed = event.keyCode;
 });
 
-// var animate = window.requestAnimationFrame ||
-//   window.webkitRequestAnimationFrame ||
-//   window.mozRequestAnimationFrame ||
-//   window.msRequestAnimationFrame ||
-//   function(callback) {
-//       window.setTimeout(callback, 1000/60)
-//   };
-//
-// var canvas = document.createElement('canvas');
-// width = WINDOW_WIDTH;
-// height = WINDOW_HEIGHT;
-// canvas.width = width;
-// canvas.height = height;
-// var context = canvas.getContext('2d');
-//
-// window.onload = function() {
-//   document.body.appendChild(canvas);
-//   animate(step);
-// };
-//
-// var step = function() {
-//   update();
-//   render();
-//   animate(step);
-// };
-//
-// function Basket(x, y, width, height) {
-//   this.x = x;
-//   this.y = y;
-//   this.width = width;
-//   this.height = height;
-//   this.x_speed = 0;
-//   this.y_speed = 0;
-// }
-//
-// Basket.prototype.render = function() {
-//   context.fillStyle = "#000000"; // black
-//   context.fillRect(this.x, this.y, this.width, this.height);
-// };
-//
-// function Player() {
-//    this.basket = new Basket(WINDOW_WIDTH/2 - 25, WINDOW_HEIGHT-20, 50, 10);
-// }
-//
-// Player.prototype.render = function() {
-//   this.basket.render();
-// };
-//
-// function Ball(x, y) {
-//   this.x = x;
-//   this.y = y;
-//   this.x_speed = 0;
-//   this.y_speed = BASE_SPEED_Y;
-//   this.radius = 25;
-// }
-//
-// Ball.prototype.render = function() {
-//   context.beginPath();
-//   context.arc(this.x, this.y, this.radius, 2 * Math.PI, false);
-//   context.fillStyle = "#000000"; // hext color: black
-//   context.fill();
-// };
-//
-// var player = new Player();
-// var ball = new Ball(WINDOW_WIDTH/2, 25);
-//
-// var render = function() {
-//   context.fillStyle = "#FFFFFF"; // hex color: white
-//   context.fillRect(0, 0, width, height);
-//   player.render();
-//   ball.render();
-// };
-//
-// Ball.prototype.update = function(basket) {
-//   if (this.y <= WINDOW_HEIGHT/2) {
-//     this.x += this.x_speed;
-//     this.y += this.y_speed;
-//   } else {
-//     // console.log("DOWN!");
-//   }
-//
-//
-//   var top_x = this.x - BALL_RADIUS;
-//   var top_y = this.y - BALL_RADIUS;
-//   var bottom_x = this.x + BALL_RADIUS;
-//   var bottom_y = this.y + BALL_RADIUS;
-//
-//   // if(this.x - BALL_RADIUS < 0) { // hitting the left wall
-//   //   this.x = BALL_RADIUS;
-//   //   this.x_speed = -this.x_speed;
-//   // } else if(this.x + BALL_RADIUS > WINDOW_WIDTH) { // hitting the right wall
-//   //   this.x = WINDOW_WIDTH - BALL_RADIUS;
-//   //   this.x_speed = -this.x_speed;
-//   // }
-//   //
-//   // if(this.y < 0 || this.y > WINDOW_HEIGHT) { // a point was scored
-//   //   this.x_speed = 0;
-//   //   this.y_speed = BASE_SPEED_Y;
-//   //   this.x = WINDOW_WIDTH/2;
-//   //   this.y = 25;
-//   // }
-//
-//   if(top_y > 300) {
-//     if(top_y < (basket.y + basket.height) && bottom_y > basket.y && top_x < (basket.x + basket.width) && bottom_x > basket.x) {
-//       this.y_speed = -BASE_SPEED_Y;
-//       this.x_speed += (basket.x_speed / 2);
-//       this.y += this.y_speed;
-//     }
-//   }
-// };
-//
-// Player.prototype.update = function() {
-//   // for(var key in keysDown) {
-//   //   var value = Number(key);
-//   //   if(value == 37) { // left arrow
-//   //     this.basket.move(-4, 0);
-//   //   } else if (value == 39) { // right arrow
-//   //     this.basket.move(4, 0);
-//   //   } else {
-//   //     this.basket.move(0, 0);
-//   //   }
-//   // }
-// };
-//
-// Basket.prototype.move = function(x, y) {
-//   this.x += x;
-//   this.y += y;
-//   this.x_speed = x;
-//   this.y_speed = y;
-//   if(this.x < 0) { // all the way to the left
-//     this.x = 0;
-//     this.x_speed = 0;
-//   } else if (this.x + this.width > WINDOW_WIDTH) { // all the way to the right
-//     this.x = WINDOW_WIDTH - this.width;
-//     this.x_speed = 0;
-//   }
-// }
-//
-// var update = function() {
-//   player.update();
-//   ball.update(player.basket);
-// };
+var animate = window.requestAnimationFrame ||
+  window.webkitRequestAnimationFrame ||
+  window.mozRequestAnimationFrame ||
+  window.msRequestAnimationFrame ||
+  function(callback) {
+      window.setTimeout(callback, 1000/60)
+  };
+
+var canvas = document.createElement('canvas');
+width = WINDOW_WIDTH;
+height = WINDOW_HEIGHT;
+canvas.width = width;
+canvas.height = height;
+var context = canvas.getContext('2d');
+
+window.onload = function() {
+  document.body.appendChild(canvas);
+  animate(step);
+};
+
+var step = function() {
+  update();
+  render();
+  animate(step);
+};
+
+function Basket(x, y, width, height) {
+  this.x = x;
+  this.y = y;
+  this.width = width;
+  this.height = height;
+  this.x_speed = 0;
+  this.y_speed = 0;
+}
+
+Basket.prototype.render = function() {
+  context.fillStyle = "#000000"; // black
+  context.fillRect(this.x, this.y, this.width, this.height);
+};
+
+function Player() {
+   this.basket = new Basket(888, 888, 50, 10); // starts basket off the screen
+}
+
+Player.prototype.render = function() {
+  this.basket.render();
+};
+
+function Ball(x, y, color) {
+  this.x = x;
+  this.y = y;
+  this.x_speed = 0;
+  this.y_speed = BASE_SPEED_Y;
+  this.radius = 25;
+  this.color = color;
+}
+
+Ball.prototype.render = function() {
+  context.beginPath();
+  context.arc(this.x, this.y, this.radius, 2 * Math.PI, false);
+  context.fillStyle = this.color;
+  context.fill();
+};
+
+var player = new Player();
+var ball = new Ball(WINDOW_WIDTH/2, 25, "#0000FF");
+var ball2 = new Ball(WINDOW_WIDTH/2 - 20, 25, "#FF0000");
+
+var render = function() {
+  context.fillStyle = "#FFFFFF"; // hex color: white
+  context.fillRect(0, 0, width, height);
+  player.render();
+  ball.render();
+  ball2.render();
+};
+
+Ball.prototype.update = function(basket) {
+  if (this.y <= WINDOW_HEIGHT/2) {
+    this.x += this.x_speed;
+    this.y += this.y_speed;
+  } else {
+    // console.log("DOWN!");
+  }
+};
+
+Player.prototype.update = function() {
+  // console.log("KP: " + keyPressed + " " + timePressed);
+  var timeDifference = performance.now() - timePressed;
+  console.log(timeDifference);
+  if (timeDifference > 2000) {
+    this.basket.move(888, 888); // off the screen
+  } else if (keyPressed == 1) {
+    this.basket.move(WINDOW_WIDTH/2 - 200, WINDOW_HEIGHT-20);
+  } else if (keyPressed == 2) {
+    this.basket.move(WINDOW_WIDTH/2 - 25, WINDOW_HEIGHT-20);
+  } else if (keyPressed == 3) {
+    this.basket.move(WINDOW_WIDTH/2 + 175, WINDOW_HEIGHT-20);
+  }
+  keyPressed = 0;
+};
+
+Basket.prototype.move = function(x, y) {
+  this.x = x;
+  this.y = y;
+}
+
+var update = function() {
+  player.update();
+  ball.update(player.basket);
+};
 
 // KEY CODES: https://www.cambiaresearch.com/articles/15/javascript-char-codes-key-codes
 // 1: 49, numpad 97
