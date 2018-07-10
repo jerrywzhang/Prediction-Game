@@ -3,9 +3,9 @@ var file = 'https://gist.githubusercontent.com/thejwzhang/af7517ff59667192288320
 
 var NUM_TRIES = 200;
 var NUM_CMD = 4;
-var NUM_POSSIBLE_OUTCOMES = 3;
 
-var finalList = [];
+var finalProbabilitiesList = [];
+var outcomesArray = [];
 var done = false;
 
 function readFile(callback) {
@@ -24,14 +24,16 @@ function readFile(callback) {
   txtFile.send(null);
 }
 
-function checkFile(linesFromFile, callback) {
+function createOutcomes(linesFromFile, callback) {
+  var NUMBER_OF_POSSIBLE_OUTCOMES = 3;
+
   var lines = []; // This is a brand new array to hold the valid lines from the txt file in number format
   // console.log(linesFromFile);
   for (var i in linesFromFile) {
     var currentLine = linesFromFile[i];
     if (currentLine) {
       var splitNums = currentLine.split(" ");
-      if (splitNums.length - 1 != NUM_POSSIBLE_OUTCOMES - 1) { // Make sure there are 2 spaces per line (3 items)
+      if (splitNums.length - 1 != NUMBER_OF_POSSIBLE_OUTCOMES - 1) { // Make sure there are 2 spaces per line (3 items)
         console.log("ERROR:  Incorrect number of items");
         alert("ERROR: Incorrect number of items!. Check the probabilities.txt file!");
       } else {
@@ -54,16 +56,41 @@ function checkFile(linesFromFile, callback) {
             alert("ERROR: One or more of the items in the file is not a number. Check the probabilities.txt file!");
           } // end else: if (!isNaN(a))
         } // end for (var num in splitNums)
-      } // end else: if (splitNums.length - 1 != NUM_POSSIBLE_OUTCOMES - 1)
+      } // end else: if (splitNums.length - 1 != NUMBER_OF_POSSIBLE_OUTCOMES - 1)
     } // end if (currentLine)
   } // end for (var i in linesFromFile)
 
-  if (lines.length != NUM_CMD*NUM_POSSIBLE_OUTCOMES) {
+  if (lines.length != NUM_CMD*NUMBER_OF_POSSIBLE_OUTCOMES) {
     console.log("ERROR: Not enough lines");
     alert("ERROR: Not enough lines! Check the probabilities.txt file!")
   }
-  finalList = lines;
-  console.log(finalList);
+  finalProbabilitiesList = lines;
+  // console.log(finalProbabilitiesList);
+
+  // Create an array of each of the trials using a random number generator
+  for (i = 0; i < finalProbabilitiesList.length; i+=NUMBER_OF_POSSIBLE_OUTCOMES) {
+    var count1 = 0;
+    var count2 = 0;
+    var count3 = 0;
+    for (j = 0; j < (NUM_TRIES/NUM_CMD); j++) {
+      var currentVal = Math.random();
+      if (currentVal < finalProbabilitiesList[i]) {
+        outcomesArray.push(1);
+        count1++;
+      } else if (currentVal < finalProbabilitiesList[i] + finalProbabilitiesList[i+1]) {
+        outcomesArray.push(2);
+        count2++;
+      } else {
+        outcomesArray.push(3);
+        count3++;
+      }
+    }
+    console.log("Given Probabilities: " + finalProbabilitiesList[i] + " " + finalProbabilitiesList[i+1] + " " + finalProbabilitiesList[i+2]);
+    console.log("True Probabilities: " + count1/50 + " " + count2/50 + " " + count3/50);
+  }
+
+  // console.log(outcomesArray);
+
   done = true;
   callback(done);
 }

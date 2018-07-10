@@ -10,14 +10,15 @@ var BG_IMAGE = "http://wallpapercave.com/wp/MuIV2JN.jpg" // unused
 var BASE_SPEED_Y = 20;
 var BALL_RADIUS = 25;
 
-readFile(checkFile);
+readFile(createOutcomes);
 
-function getResult(done) {
+function getResult(done) { // called as the callback of createOutcomes
   console.log(done);
   if (done != true) { // should always be true to mean that the array has been succesfully created
     alert("The array was not created properly!");
     console.log("The array was not created properly!");
   }
+  console.log(outcomesArray);
 }
 
 var animate = window.requestAnimationFrame ||
