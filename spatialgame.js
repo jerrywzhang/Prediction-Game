@@ -2,14 +2,23 @@
 
 // Variables to change
 
-
-
 // Code starts here
+
 var WINDOW_WIDTH = 600;
 var WINDOW_HEIGHT = 600;
 var BG_IMAGE = "http://wallpapercave.com/wp/MuIV2JN.jpg" // unused
 var BASE_SPEED_Y = 20;
 var BALL_RADIUS = 25;
+
+readFile(checkFile);
+
+function getResult(done) {
+  console.log(done);
+  if (done != true) { // should always be true to mean that the array has been succesfully created
+    alert("The array was not created properly!");
+    console.log("The array was not created properly!");
+  }
+}
 
 var animate = window.requestAnimationFrame ||
   window.webkitRequestAnimationFrame ||

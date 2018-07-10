@@ -5,6 +5,9 @@ var NUM_TRIES = 200;
 var NUM_CMD = 4;
 var NUM_POSSIBLE_OUTCOMES = 3;
 
+var finalList = [];
+var done = false;
+
 function readFile(callback) {
   var txtFile = new XMLHttpRequest();
   txtFile.open("GET", file, true);
@@ -13,16 +16,15 @@ function readFile(callback) {
       if (txtFile.status === 200) {  // File found
         allText = txtFile.responseText;
         lines = allText.split("\n"); // Separates each line into an array
-        callback(lines);
+        // console.log(lines);
+        callback(lines, getResult);
       }
     }
   }
   txtFile.send(null);
 }
 
-var finalList = [];
-
-readFile(function(linesFromFile) { // callback function checks to make sure the file is valid and converts string to numbers
+function checkFile(linesFromFile, callback) {
   var lines = []; // This is a brand new array to hold the valid lines from the txt file in number format
   // console.log(linesFromFile);
   for (var i in linesFromFile) {
@@ -62,4 +64,6 @@ readFile(function(linesFromFile) { // callback function checks to make sure the 
   }
   finalList = lines;
   console.log(finalList);
-});
+  done = true;
+  callback(done);
+}
