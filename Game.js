@@ -8,7 +8,7 @@
 var WINDOW_WIDTH = 600;
 var WINDOW_HEIGHT = 600;
 var BG_IMAGE = "http://wallpapercave.com/wp/MuIV2JN.jpg"; // unused
-var BASE_SPEED_Y = 20;
+var BASE_SPEED_Y = 10;
 var BALL_RADIUS = 25;
 
 var timePressed = 0;
@@ -107,7 +107,7 @@ Player.prototype.render = function() {
   this.basket.render();
 };
 
-function Ball(color, id) {
+function Ball(color, id, counter) {
   this.x = WINDOW_WIDTH/2;
   this.y = -25; // start both balls off the screen
   this.x_speed = 0;
@@ -115,7 +115,7 @@ function Ball(color, id) {
   this.radius = 25;
   this.color = color;
   this.id = id;
-  this.counter = 0;
+  this.counter = counter;
 }
 
 Ball.prototype.render = function() {
