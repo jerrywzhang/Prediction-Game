@@ -1,8 +1,8 @@
 // Author: Jerry Zhang
 
-var NUMBER_OF_TOTAL_TRIES = 200;
-var NUMBER_OF_DIFFERENT_PROBABILITIES = 4;
-var probabilitiesFile = 'https://gist.githubusercontent.com/thejwzhang/af7517ff59667192288320db2205f6f8/raw/50e29433823b3746a5120e382a8604ef4d764189/Probabilities.txt';
+var NUMBER_OF_TOTAL_TRIES = 400;
+var NUMBER_OF_DIFFERENT_PROBABILITIES = 8;
+var probabilitiesFile = 'https://gist.githubusercontent.com/thejwzhang/af7517ff59667192288320db2205f6f8/raw/c735aa95d117b0b87353d88fc9834dd460f5f75d/Probabilities.txt';
 /*
 Probabilities.txt File Format:
 
@@ -10,8 +10,14 @@ Probabilities.txt File Format:
 2|Num1 Num2 Num3
 3|Num1 Num2 Num3
 4|Num1 Num2 Num3
+5|Num1 Num2 Num3
+6|Num1 Num2 Num3
+7|Num1 Num2 Num3
+8|Num1 Num2 Num3
 
-Lines 1-4: The 3 numbers in each line add up to 1.
+Lines 1-4: Probabilities for ball 1
+Lines 5-8: Probabilities for ball 2
+Lines 1-8: The 3 numbers in each line add up to 1.
 */
 
 
@@ -54,7 +60,7 @@ function createOutcomes(linesFromFile, callback) { // Creates 2 lists: one list 
     var currentLine = linesFromFile[i];
     if (currentLine) {
       var splitNums = currentLine.split(" ");
-      if (splitNums.length - 1 != NUMBER_OF_POSSIBLE_OUTCOMES - 1) { // Make sure there are 2 spaces per line (3 items)
+      if (splitNums.length != NUMBER_OF_POSSIBLE_OUTCOMES) { // Make sure there are 3 items per line
         console.log("ERROR:  Incorrect number of items");
         alert("ERROR: Incorrect number of items!. Check the probabilities.txt file!");
       } else {

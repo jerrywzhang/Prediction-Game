@@ -1,6 +1,6 @@
 // Author: Jerry Zhang
 
-var arraysFile = 'https://gist.githubusercontent.com/thejwzhang/6ad2b58a35de10f15b71856d5e30b212/raw/70e09c67ffb3aeb2d4e699ad7208faec1e9b07b5/Arrays.txt';
+var arraysFile = 'https://gist.githubusercontent.com/thejwzhang/6ad2b58a35de10f15b71856d5e30b212/raw/1e9eebd7d2bf5958da008c203569b8f22e9a5a9c/Arrays.txt';
 /*
 Arrays.txt File Format:
 x,y,z,a,b,....Nx,y,z,a,b,c....
@@ -10,6 +10,10 @@ N separates the 2 arrays.
 First array: 1, 2, or 3 for where the ball will end up
 Second array: 0 or 1 for which ball
 */
+
+// IF YOU CHANGE THESE TWO VARIABLES, MAKE SURE YOU CHANGE THEM IN GenerateList.js AS WELL
+var NUMBER_OF_TOTAL_TRIES = 400;
+var NUMBER_OF_DIFFERENT_PROBABILITIES = 8;
 
 readFile(createOutcomes);
 
@@ -46,7 +50,7 @@ function createOutcomes(callback) { // Converts strings to numbers
 function pushToArray(num, array) {
   var currentLine = lines[num]; // first array
   var splitNums = currentLine.split(",");
-  if (splitNums.length != 200) { // Make sure there are 200 items per line
+  if (splitNums.length != NUMBER_OF_TOTAL_TRIES) { // Make sure there are 400 items per line
     console.log("ERROR:  Incorrect number of items");
     alert("ERROR: Incorrect number of items!. Check the Arrays.txt file!");
   } else {
@@ -59,7 +63,7 @@ function pushToArray(num, array) {
         alert("ERROR: One or more of the items in the file is not a number. Check the Arrays.txt file!");
       } // end else: if (!isNaN(a))
     } // end for (var num in splitNums)
-  } // end else: if (splitNums.length != 200)
+  } // end else: if (splitNums.length != NUMBER_OF_TOTAL_TRIES)
 }
 
 function getResult(done) { // called as the callback of createOutcomes

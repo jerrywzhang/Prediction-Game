@@ -107,14 +107,15 @@ Player.prototype.render = function() {
   this.basket.render();
 };
 
-function Ball(x, y, color, id) {
-  this.x = x;
-  this.y = y;
+function Ball(color, id) {
+  this.x = WINDOW_WIDTH/2;
+  this.y = -25; // start both balls off the screen
   this.x_speed = 0;
   this.y_speed = BASE_SPEED_Y;
   this.radius = 25;
   this.color = color;
   this.id = id;
+  this.counter = 0;
 }
 
 Ball.prototype.render = function() {
@@ -126,8 +127,8 @@ Ball.prototype.render = function() {
 
 var line = new Line(0, WINDOW_HEIGHT*3/4, WINDOW_WIDTH, 2);
 var player = new Player();
-var ball = new Ball(888, 0, "#0000FF", 1);
-var ball2 = new Ball(888, 0, "#FF0000", 2); // start both balls off the screen
+var ball = new Ball("#0000FF", 0, 0);
+var ball2 = new Ball("#FF0000", 1, 200);
 
 var render = function() {
   context.fillStyle = "#FFFFFF"; // hex color: white
@@ -147,15 +148,15 @@ var hitThisTime = false;
 
 function updateBall(ball) {
   document.getElementById("go").innerHTML = "Status: Press 1, 2, or 3!";
-  // console.log(arrayCounter + " " + outcomesArray[arrayCounter]);
+  // console.log(ball.counter + " " + outcomesArray[ball.counter]);
   if (ball.y <= WINDOW_HEIGHT*3/4) {
     ball.x_speed = 0;
     ball.y_speed = BASE_SPEED_Y;
     ball.x += ball.x_speed;
     ball.y += ball.y_speed;
     // console.log(keyPressed);
-    // console.log(outcomesArray[arrayCounter] + " " + doneOnce + " " + keyPressed);
-    if (keyPressed == outcomesArray[arrayCounter] && !doneOnce) {
+    // console.log(outcomesArray[ball.counter] + " " + doneOnce + " " + keyPressed);
+    if (keyPressed == outcomesArray[ball.counter] && !doneOnce) {
       hitCounter++;
       keyPressed = 0;
       console.log("HIT");
@@ -180,39 +181,45 @@ function updateBall(ball) {
     } else {
       document.getElementById("hit").innerHTML = "Result: NO INPUT";
     }
-    if (outcomesArray[arrayCounter] == 1) {
+    if (outcomesArray[ball.counter] == 1) {
       ball.x_speed = -30;
       ball.y_speed = 16;
-    } else if (outcomesArray[arrayCounter] == 2) {
+    } else if (outcomesArray[ball.counter] == 2) {
       ball.x_speed = 0;
       ball.y_speed = 16;
-    } else if (outcomesArray[arrayCounter] == 3) {
+    } else if (outcomesArray[ball.counter] == 3) {
       ball.x_speed = 30;
       ball.y_speed = 16;
-    } else if (outcomesArray[arrayCounter] == 999) {
+    } else if (outcomesArray[ball.counter] == 999) {
       ball.x_speed = 0;
       ball.y_speed = 0;
-    } else if (outcomesArray[arrayCounter] == 888) {
+    } else if (outcomesArray[ball.counter] == 888) {
       ball.x_speed = 0;
       ball.y_speed = 10;
     } else {
-      alert("There's an issue! " + outcomesArray[arrayCounter] + " " + arrayCounter);
-      console.log("There's an issue! " + outcomesArray[arrayCounter] + " " + arrayCounter);
+      alert("There's an issue! " + outcomesArray[ball.counter] + " " + ball.counter);
+      console.log("There's an issue! " + outcomesArray[ball.counter] + " " + ball.counter);
     }
     ball.x += ball.x_speed;
     ball.y += ball.y_speed;
     if (ball.y > WINDOW_HEIGHT - 20) {
       ball.x = WINDOW_WIDTH/2;
-      ball.y = 25;
+      ball.y = -25;
       keyPressed = 0;
-      if (arrayCounter < 199) {
+      if (ball.id == 0 && ball.counter < 199) {
+        ball.counter++;
+        arrayCounter++;
+        doneOnce = false;
+        hitThisTime = false;
+      } else if (ball.id == 1 && ball.counter < 399) {
+        ball.counter++;
         arrayCounter++;
         doneOnce = false;
         hitThisTime = false;
       } else {
         alert("You've finished the game! " + hitCounter);
         outcomesArray.push(999);
-        arrayCounter = 200;
+        ball.counter = 200;
         ball.x = WINDOW_WIDTH/2;
         ball.y = 25;
         console.log("HIT: " + hitCounter + " MISS: " + missCounter + " %: " + hitCounter/200);
@@ -224,8 +231,13 @@ function updateBall(ball) {
 }
 
 Ball.prototype.update = function(basket) {
-  if (this.id == 2) {
+  console.log(ballAppearArray[arrayCounter] + " " + this.counter + " " + this.id);
+  if (this.id == ballAppearArray[arrayCounter]) {
+    // this.x = WINDOW_WIDTH/2;
+    // this.y = 25;
+
     updateBall(this);
+  } else {
   }
 };
 
