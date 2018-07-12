@@ -1,8 +1,31 @@
 // Author: Jerry Zhang
 
+var NUMBER_OF_TOTAL_TRIES = 200;
+var NUMBER_OF_DIFFERENT_PROBABILITIES = 4;
+var probabilitiesFile = 'https://gist.githubusercontent.com/thejwzhang/af7517ff59667192288320db2205f6f8/raw/50e29433823b3746a5120e382a8604ef4d764189/Probabilities.txt';
+/*
+Probabilities.txt File Format:
+
+1|Num1 Num2 Num3
+2|Num1 Num2 Num3
+3|Num1 Num2 Num3
+4|Num1 Num2 Num3
+
+Lines 1-4: The 3 numbers in each line add up to 1.
+*/
+
+
+readFile(createOutcomes);
+
+//Functions
+var finalProbabilitiesList = [];
+var outcomesArray = [];
+var ballAppearArray = [];
+var done = false;
+
 function readFile(callback) {
   var txtFile = new XMLHttpRequest();
-  txtFile.open("GET", file, true);
+  txtFile.open("GET", probabilitiesFile, true);
   txtFile.onreadystatechange = function() {
     if (txtFile.readyState === 4) {  // Ready to parse
       if (txtFile.status === 200) {  // File found
@@ -16,7 +39,13 @@ function readFile(callback) {
   txtFile.send(null);
 }
 
-function createOutcomes(linesFromFile, callback) {
+function createOutcomes(linesFromFile, callback) { // Creates 2 lists: one list for which place (1,2, or 3) a ball is going. The other for which ball appears (1 or 2)
+  // Create list for which ball appears: either 0 or 1.
+  for (i = 0; i < NUMBER_OF_TOTAL_TRIES; i++) {
+    ballAppearArray.push(Math.floor(Math.random() * Math.floor(2)));
+  }
+
+  // Create list for which place a ball is going
   var NUMBER_OF_POSSIBLE_OUTCOMES = 3;
 
   var lines = []; // This is a brand new array to hold the valid lines from the txt file in number format
@@ -84,4 +113,20 @@ function createOutcomes(linesFromFile, callback) {
   // console.log(outcomesArray);
   done = true;
   callback(done);
+}
+
+function getResult(done) { // called as the callback of createOutcomes
+  // console.log(done);
+  if (done != true) { // should always be true to mean that the array has been succesfully created
+    alert("The array was not created properly!");
+    console.log("The array was not created properly!");
+  }
+  console.log(outcomesArray);
+
+  var hiddenElement = document.createElement('a');
+
+  hiddenElement.href = 'data:attachment/text,' + encodeURI(outcomesArray) + "N" + encodeURI(ballAppearArray);
+  hiddenElement.target = '_blank';
+  hiddenElement.download = 'Arrays.txt';
+  hiddenElement.click();
 }

@@ -1,31 +1,15 @@
 // Author: Jerry Zhang
 
 // Variables to change
-var file = 'https://gist.githubusercontent.com/thejwzhang/af7517ff59667192288320db2205f6f8/raw/50e29433823b3746a5120e382a8604ef4d764189/Probabilities.txt';
-var NUMBER_OF_TOTAL_TRIES = 200;
-var NUMBER_OF_DIFFERENT_PROBABILITIES = 4;
+
 
 // Code starts here
-var finalProbabilitiesList = [];
-var outcomesArray = [];
-var done = false;
 
 var WINDOW_WIDTH = 600;
 var WINDOW_HEIGHT = 600;
 var BG_IMAGE = "http://wallpapercave.com/wp/MuIV2JN.jpg"; // unused
 var BASE_SPEED_Y = 20;
 var BALL_RADIUS = 25;
-
-readFile(createOutcomes);
-
-function getResult(done) { // called as the callback of createOutcomes
-  // console.log(done);
-  if (done != true) { // should always be true to mean that the array has been succesfully created
-    alert("The array was not created properly!");
-    console.log("The array was not created properly!");
-  }
-  console.log(outcomesArray);
-}
 
 var timePressed = 0;
 var keyPressed = 0;
@@ -123,13 +107,14 @@ Player.prototype.render = function() {
   this.basket.render();
 };
 
-function Ball(x, y, color) {
+function Ball(x, y, color, id) {
   this.x = x;
   this.y = y;
   this.x_speed = 0;
   this.y_speed = BASE_SPEED_Y;
   this.radius = 25;
   this.color = color;
+  this.id = id;
 }
 
 Ball.prototype.render = function() {
@@ -141,8 +126,8 @@ Ball.prototype.render = function() {
 
 var line = new Line(0, WINDOW_HEIGHT*3/4, WINDOW_WIDTH, 2);
 var player = new Player();
-var ball = new Ball(WINDOW_WIDTH/2, 25, "#0000FF");
-// var ball2 = new Ball(WINDOW_WIDTH/2 - 20, 25, "#FF0000");
+var ball = new Ball(888, 0, "#0000FF", 1);
+var ball2 = new Ball(888, 0, "#FF0000", 2); // start both balls off the screen
 
 var render = function() {
   context.fillStyle = "#FFFFFF"; // hex color: white
@@ -150,24 +135,24 @@ var render = function() {
   player.render();
   ball.render();
   line.render();
-  // ball2.render();
+  ball2.render();
+  // console.log(ball.y);
 };
 
 var arrayCounter = 0;
 var hitCounter = 0;
 var missCounter = 0;
-var noInputCounter = 0;
 var doneOnce = false;
 var hitThisTime = false;
 
-Ball.prototype.update = function(basket) {
+function updateBall(ball) {
   document.getElementById("go").innerHTML = "Status: Press 1, 2, or 3!";
   // console.log(arrayCounter + " " + outcomesArray[arrayCounter]);
-  if (this.y <= WINDOW_HEIGHT*3/4) {
-    this.x_speed = 0;
-    this.y_speed = BASE_SPEED_Y;
-    this.x += this.x_speed;
-    this.y += this.y_speed;
+  if (ball.y <= WINDOW_HEIGHT*3/4) {
+    ball.x_speed = 0;
+    ball.y_speed = BASE_SPEED_Y;
+    ball.x += ball.x_speed;
+    ball.y += ball.y_speed;
     // console.log(keyPressed);
     // console.log(outcomesArray[arrayCounter] + " " + doneOnce + " " + keyPressed);
     if (keyPressed == outcomesArray[arrayCounter] && !doneOnce) {
@@ -183,8 +168,6 @@ Ball.prototype.update = function(basket) {
       missCounter++;
       doneOnce = true;
       hitThisTime = false;
-    } else {
-      noInputCounter++;
     }
   } else {
     // console.log(hitThisTime);
@@ -198,26 +181,29 @@ Ball.prototype.update = function(basket) {
       document.getElementById("hit").innerHTML = "Result: NO INPUT";
     }
     if (outcomesArray[arrayCounter] == 1) {
-      this.x_speed = -30;
-      this.y_speed = 16;
+      ball.x_speed = -30;
+      ball.y_speed = 16;
     } else if (outcomesArray[arrayCounter] == 2) {
-      this.x_speed = 0;
-      this.y_speed = 16;
+      ball.x_speed = 0;
+      ball.y_speed = 16;
     } else if (outcomesArray[arrayCounter] == 3) {
-      this.x_speed = 30;
-      this.y_speed = 16;
+      ball.x_speed = 30;
+      ball.y_speed = 16;
     } else if (outcomesArray[arrayCounter] == 999) {
-      this.x_speed = 0;
-      this.y_speed = 0;
+      ball.x_speed = 0;
+      ball.y_speed = 0;
+    } else if (outcomesArray[arrayCounter] == 888) {
+      ball.x_speed = 0;
+      ball.y_speed = 10;
     } else {
-      alert("There's an issue! " + outcomesArray[arrayCounter]);
-      console.log("There's an issue! " + outcomesArray[arrayCounter]);
+      alert("There's an issue! " + outcomesArray[arrayCounter] + " " + arrayCounter);
+      console.log("There's an issue! " + outcomesArray[arrayCounter] + " " + arrayCounter);
     }
-    this.x += this.x_speed;
-    this.y += this.y_speed;
-    if (this.y > WINDOW_HEIGHT - 20) {
-      this.x = WINDOW_WIDTH/2;
-      this.y = 25;
+    ball.x += ball.x_speed;
+    ball.y += ball.y_speed;
+    if (ball.y > WINDOW_HEIGHT - 20) {
+      ball.x = WINDOW_WIDTH/2;
+      ball.y = 25;
       keyPressed = 0;
       if (arrayCounter < 199) {
         arrayCounter++;
@@ -227,13 +213,19 @@ Ball.prototype.update = function(basket) {
         alert("You've finished the game! " + hitCounter);
         outcomesArray.push(999);
         arrayCounter = 200;
-        this.x = WINDOW_WIDTH/2;
-        this.y = 25;
-        console.log("HIT: " + hitCounter + " MISS: " + missCounter + + " Nothing: " + noInputCounter + " %: " + hitCounter/200);
+        ball.x = WINDOW_WIDTH/2;
+        ball.y = 25;
+        console.log("HIT: " + hitCounter + " MISS: " + missCounter + " %: " + hitCounter/200);
         console.log(hitCounter + missCounter);
       }
     }
     // console.log(performance.now());
+  }
+}
+
+Ball.prototype.update = function(basket) {
+  if (this.id == 2) {
+    updateBall(this);
   }
 };
 
@@ -261,7 +253,7 @@ Basket.prototype.move = function(x, y) {
 var update = function() {
   player.update();
   ball.update(player.basket);
-  // ball2.update(player.basket);
+  ball2.update(player.basket);
 };
 
 function sleep(milliseconds) {
