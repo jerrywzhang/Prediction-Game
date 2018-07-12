@@ -75,6 +75,7 @@ width = WINDOW_WIDTH;
 height = WINDOW_HEIGHT;
 canvas.width = width;
 canvas.height = height;
+
 var context = canvas.getContext('2d');
 
 window.onload = function() {
@@ -98,6 +99,18 @@ function Basket(x, y, width, height) {
 }
 
 Basket.prototype.render = function() {
+  context.fillStyle = "#000000"; // black
+  context.fillRect(this.x, this.y, this.width, this.height);
+};
+
+function Line(x, y, width, height) {
+  this.x = x;
+  this.y = y;
+  this.width = width;
+  this.height = height;
+}
+
+Line.prototype.render = function() {
   context.fillStyle = "#000000"; // black
   context.fillRect(this.x, this.y, this.width, this.height);
 };
@@ -126,6 +139,7 @@ Ball.prototype.render = function() {
   context.fill();
 };
 
+var line = new Line(0, WINDOW_HEIGHT*3/4, WINDOW_WIDTH, 2);
 var player = new Player();
 var ball = new Ball(WINDOW_WIDTH/2, 25, "#0000FF");
 // var ball2 = new Ball(WINDOW_WIDTH/2 - 20, 25, "#FF0000");
@@ -135,6 +149,7 @@ var render = function() {
   context.fillRect(0, 0, width, height);
   player.render();
   ball.render();
+  line.render();
   // ball2.render();
 };
 
@@ -142,32 +157,43 @@ var arrayCounter = 0;
 var hitCounter = 0;
 var missCounter = 0;
 var doneOnce = false;
+var hitThisTime = false;
 
 Ball.prototype.update = function(basket) {
+  document.getElementById("go").innerHTML = "Status: Press 1, 2, or 3!";
   // console.log(arrayCounter + " " + outcomesArray[arrayCounter]);
   if (this.y <= WINDOW_HEIGHT*3/4) {
     this.x_speed = 0;
     this.y_speed = BASE_SPEED_Y;
     this.x += this.x_speed;
     this.y += this.y_speed;
-    console.log(outcomesArray[arrayCounter] + " " + doneOnce + " " + keyPressed);
+    // console.log(keyPressed);
+    // console.log(outcomesArray[arrayCounter] + " " + doneOnce + " " + keyPressed);
     if (keyPressed == outcomesArray[arrayCounter] && !doneOnce) {
       hitCounter++;
       keyPressed = 0;
       console.log("HIT");
       // console.log(performance.now() - timePressed);
       doneOnce = true;
-      document.getElementById("hit").innerHTML = "HIT";
-    } else if (keyPressed != 0) {
+      hitThisTime = true;
+    } else if (keyPressed != 0 && !doneOnce) {
       console.log("MISS");
       keyPressed = 0;
       missCounter++;
       doneOnce = true;
-      document.getElementById("hit").innerHTML = "MISS";
+      hitThisTime = false;
     }
   } else {
-    console.log("TOO LATE!!!!!!!!!!!!!");
-    doneOnce = false;
+    // console.log(hitThisTime);
+    // console.log("TOO LATE!!!!!!!!!!!!!");
+    document.getElementById("go").innerHTML = "Status: Don't press!";
+    if (hitThisTime) {
+      document.getElementById("hit").innerHTML = "Result: HIT";
+    } else if (doneOnce) {
+      document.getElementById("hit").innerHTML = "Result: MISS";
+    } else {
+      document.getElementById("hit").innerHTML = "Result: NO INPUT";
+    }
     if (outcomesArray[arrayCounter] == 1) {
       this.x_speed = -30;
       this.y_speed = 16;
@@ -181,7 +207,7 @@ Ball.prototype.update = function(basket) {
       this.x_speed = 0;
       this.y_speed = 0;
     } else {
-      alert("There's an issue!");
+      alert("There's an issue! " + outcomesArray[arrayCounter]);
     }
     this.x += this.x_speed;
     this.y += this.y_speed;
@@ -191,9 +217,10 @@ Ball.prototype.update = function(basket) {
       keyPressed = 0;
       if (arrayCounter < 199) {
         arrayCounter++;
-        // sleep(100);
+        doneOnce = false;
+        hitThisTime = false;
       } else {
-        alert("You've finished the game!");
+        alert("You've finished the game! " + hitCounter);
         outcomesArray.push(999);
         arrayCounter = 200;
         this.x = WINDOW_WIDTH/2;
