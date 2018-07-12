@@ -156,6 +156,7 @@ var render = function() {
 var arrayCounter = 0;
 var hitCounter = 0;
 var missCounter = 0;
+var noInputCounter = 0;
 var doneOnce = false;
 var hitThisTime = false;
 
@@ -182,6 +183,8 @@ Ball.prototype.update = function(basket) {
       missCounter++;
       doneOnce = true;
       hitThisTime = false;
+    } else {
+      noInputCounter++;
     }
   } else {
     // console.log(hitThisTime);
@@ -208,6 +211,7 @@ Ball.prototype.update = function(basket) {
       this.y_speed = 0;
     } else {
       alert("There's an issue! " + outcomesArray[arrayCounter]);
+      console.log("There's an issue! " + outcomesArray[arrayCounter]);
     }
     this.x += this.x_speed;
     this.y += this.y_speed;
@@ -225,7 +229,7 @@ Ball.prototype.update = function(basket) {
         arrayCounter = 200;
         this.x = WINDOW_WIDTH/2;
         this.y = 25;
-        console.log("HIT: " + hitCounter + " MISS: " + missCounter + " %: " + hitCounter/200);
+        console.log("HIT: " + hitCounter + " MISS: " + missCounter + + " Nothing: " + noInputCounter + " %: " + hitCounter/200);
         console.log(hitCounter + missCounter);
       }
     }
