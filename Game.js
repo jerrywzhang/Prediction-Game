@@ -8,7 +8,7 @@
 var WINDOW_WIDTH = 600;
 var WINDOW_HEIGHT = 600;
 var BG_IMAGE = "http://wallpapercave.com/wp/MuIV2JN.jpg"; // unused
-var BASE_SPEED_Y = 10;
+var BASE_SPEED_Y = 100;
 var BALL_RADIUS = 25;
 
 var timePressed = 0;
@@ -145,6 +145,7 @@ var hitCounter = 0;
 var missCounter = 0;
 var doneOnce = false;
 var hitThisTime = false;
+var doneWithGame = false;
 
 function updateBall(ball) {
   document.getElementById("go").innerHTML = "Status: Press 1, 2, or 3!";
@@ -216,14 +217,21 @@ function updateBall(ball) {
         arrayCounter++;
         doneOnce = false;
         hitThisTime = false;
-      } else {
+      } else if (!doneWithGame) {
         alert("You've finished the game! " + hitCounter);
         outcomesArray.push(999);
-        ball.counter = 200;
+        ballAppearArray.push(999);
+        if (ball.id == 1) {
+          ball.counter = 400;
+        } else {
+          ball.counter = 200;
+        }
         ball.x = WINDOW_WIDTH/2;
-        ball.y = 25;
+        ball.y = WINDOW_HEIGHT+25;
         console.log("HIT: " + hitCounter + " MISS: " + missCounter + " %: " + hitCounter/200);
         console.log(hitCounter + missCounter);
+        console.log(ball.id + " "  + ball.counter);
+        doneWithGame = true;
       }
     }
     // console.log(performance.now());
@@ -231,7 +239,7 @@ function updateBall(ball) {
 }
 
 Ball.prototype.update = function(basket) {
-  console.log(ballAppearArray[arrayCounter] + " " + this.counter + " " + this.id);
+  // console.log(ballAppearArray[arrayCounter] + " " + this.counter + " " + this.id);
   if (this.id == ballAppearArray[arrayCounter]) {
     // this.x = WINDOW_WIDTH/2;
     // this.y = 25;

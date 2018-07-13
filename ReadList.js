@@ -72,6 +72,6 @@ function getResult(done) { // called as the callback of createOutcomes
     alert("The array was not created properly!");
     console.log("The array was not created properly!");
   }
-  console.log(outcomesArray);
-  console.log(ballAppearArray);
+  console.log("Outcomes: " + outcomesArray);
+  console.log("Which Ball: " + ballAppearArray);
 }
