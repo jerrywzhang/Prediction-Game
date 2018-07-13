@@ -8,7 +8,7 @@
 var WINDOW_WIDTH = 600;
 var WINDOW_HEIGHT = 600;
 var BG_IMAGE = "http://wallpapercave.com/wp/MuIV2JN.jpg"; // unused
-var BASE_SPEED_Y = 100;
+var BASE_SPEED_Y = 15;
 var BALL_RADIUS = 25;
 
 var timePressed = 0;
