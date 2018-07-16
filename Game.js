@@ -80,23 +80,14 @@ function Basket(x, y, width, height) {
   this.height = height;
   this.x_speed = 0;
   this.y_speed = 0;
+  this.angle = 0;
 }
 
 Basket.prototype.render = function() {
   context.fillStyle = "#000000"; // black
+  context.rotate(this.angle);
   context.fillRect(this.x, this.y, this.width, this.height);
-};
-
-function Line(x, y, width, height) {
-  this.x = x;
-  this.y = y;
-  this.width = width;
-  this.height = height;
-}
-
-Line.prototype.render = function() {
-  context.fillStyle = "#000000"; // black
-  context.fillRect(this.x, this.y, this.width, this.height);
+  context.rotate(-this.angle);
 };
 
 function Player() {
@@ -125,7 +116,6 @@ Ball.prototype.render = function() {
   context.fill();
 };
 
-var line = new Line(0, WINDOW_HEIGHT*3/4, WINDOW_WIDTH, 2);
 var player = new Player();
 var ball = new Ball("#0000FF", 0, 0);
 var ball2 = new Ball("#FF0000", 1, 200);
@@ -135,7 +125,6 @@ var render = function() {
   context.fillRect(0, 0, width, height);
   player.render();
   ball.render();
-  line.render();
   ball2.render();
   // console.log(ball.y);
 };
@@ -253,21 +242,22 @@ Player.prototype.update = function() {
   // console.log("KP: " + keyPressed + " " + timePressed);
   var timeDifference = performance.now() - timePressed;
   // console.log(performance.now());
-  if (timeDifference > 200) {
-    this.basket.move(888, 888); // off the screen
+  if (timeDifference > 20000) {
+    this.basket.move(888, 888, 0); // off the screen
     keyPressed = 0;
   } else if (keyPressed == 1) {
-    this.basket.move(WINDOW_WIDTH/2 - 200, WINDOW_HEIGHT-20);
+    this.basket.move(WINDOW_WIDTH/2 - 25, WINDOW_HEIGHT-20, 0);
   } else if (keyPressed == 2) {
-    this.basket.move(WINDOW_WIDTH/2 - 25, WINDOW_HEIGHT-20);
+    this.basket.move(-15.1924, 236.603, -30); // calculated from rotation matrix for 30 degrees counterclockwise. xy coordinate in normal plane: (300-100*sqrt3, 200)
   } else if (keyPressed == 3) {
-    this.basket.move(WINDOW_WIDTH/2 + 175, WINDOW_HEIGHT-20);
+    this.basket.move(484.808, -63.3975, 30); // calculated from rotation matrix for 30 degrees clockwise. xy coordinate in normal plane: (300+100*sqrt3, 200)
   }
 };
 
-Basket.prototype.move = function(x, y) {
+Basket.prototype.move = function(x, y, rotation) {
   this.x = x;
   this.y = y;
+  this.angle = rotation * Math.PI/180;
 }
 
 var update = function() {
