@@ -7,13 +7,12 @@
 
 var WINDOW_WIDTH = 600;
 var WINDOW_HEIGHT = 600;
-var BG_IMAGE = "http://wallpapercave.com/wp/MuIV2JN.jpg"; // unused
-var BASE_SPEED_Y = 15;
 var BALL_RADIUS = 25;
 
 var timePressed = 0;
 var keyPressed = 0;
 var lastKeyPressed = 0;
+var newKeyPressed = false;
 
 document.addEventListener("keydown", function(event) {
   var key = event.keyCode;
@@ -24,22 +23,23 @@ document.addEventListener("keydown", function(event) {
     timePressed = performance.now();
     console.log("1 Pressed");
     keyPressed = 1;
+    newKeyPressed = true;
   } else if (key == 50 || key == 98) {
     timePressed = performance.now();
     console.log("2 Pressed");
     keyPressed = 2;
+    newKeyPressed = true;
   } else if (key == 51 || key == 99) {
     timePressed = performance.now();
     console.log("3 Pressed");
     keyPressed = 3;
-  } else if (key == 13) {
-    // console.log("enter");
+    newKeyPressed = true;
   } else {
     // console.log("Key Number " + key + " Pressed");
     keyPressed = 0;
+    newKeyPressed = false;
   }
   lastKeyPressed = key;
-  // console.log(timePressed);
 });
 
 document.addEventListener("keyup", function(event) {
@@ -99,16 +99,16 @@ Player.prototype.render = function() {
 };
 
 function Ball(color, id, counter) {
-  this.x = WINDOW_WIDTH/2;
-  this.y = -25; // start both balls off the screen
+  this.x = -25;
+  this.y = 0; // start both balls off the screen
   this.x_speed = 0;
-  this.y_speed = BASE_SPEED_Y;
+  this.y_speed = 0;
   this.radius = 25;
   this.color = color;
   this.id = id;
   this.counter = counter;
 }
-
+1
 Ball.prototype.render = function() {
   context.beginPath();
   context.arc(this.x, this.y, this.radius, 2 * Math.PI, false);
@@ -126,7 +126,6 @@ var render = function() {
   player.render();
   ball.render();
   ball2.render();
-  // console.log(ball.y);
 };
 
 var arrayCounter = 0;
@@ -135,34 +134,31 @@ var missCounter = 0;
 var doneOnce = false;
 var hitThisTime = false;
 var doneWithGame = false;
+var startTime = 0;
+var wasKeyPressedLastTime = false;
 
 function updateBall(ball) {
   document.getElementById("go").innerHTML = "Status: Press 1, 2, or 3!";
-  // console.log(ball.counter + " " + outcomesArray[ball.counter]);
-  if (ball.y <= WINDOW_HEIGHT*3/4) {
+  if (!newKeyPressed) { // wait until user keypress before moving the ball and going to next one
     ball.x_speed = 0;
-    ball.y_speed = BASE_SPEED_Y;
-    ball.x += ball.x_speed;
-    ball.y += ball.y_speed;
-    // console.log(keyPressed);
-    // console.log(outcomesArray[ball.counter] + " " + doneOnce + " " + keyPressed);
+    ball.y_speed = 0;
+    ball.x = WINDOW_WIDTH/2;
+    ball.y = WINDOW_HEIGHT/2;
+  } else if (newKeyPressed && !wasKeyPressedLastTime) {
     if (keyPressed == outcomesArray[ball.counter] && !doneOnce) {
       hitCounter++;
-      keyPressed = 0;
       console.log("HIT");
-      // console.log(performance.now() - timePressed);
       doneOnce = true;
       hitThisTime = true;
+      keyPressed = 0;
     } else if (keyPressed != 0 && !doneOnce) {
       console.log("MISS");
-      keyPressed = 0;
       missCounter++;
       doneOnce = true;
       hitThisTime = false;
+      keyPressed = 0;
     }
   } else {
-    // console.log(hitThisTime);
-    // console.log("TOO LATE!!!!!!!!!!!!!");
     document.getElementById("go").innerHTML = "Status: Don't press!";
     if (hitThisTime) {
       document.getElementById("hit").innerHTML = "Result: HIT";
@@ -172,14 +168,14 @@ function updateBall(ball) {
       document.getElementById("hit").innerHTML = "Result: NO INPUT";
     }
     if (outcomesArray[ball.counter] == 1) {
-      ball.x_speed = -30;
-      ball.y_speed = 16;
-    } else if (outcomesArray[ball.counter] == 2) {
       ball.x_speed = 0;
-      ball.y_speed = 16;
+      ball.y_speed = 14.76; // used pythagorean theorem from 2 and 3 to make sure this ball travels at the same speed
+    } else if (outcomesArray[ball.counter] == 2) {
+      ball.x_speed = -13;
+      ball.y_speed = -7;
     } else if (outcomesArray[ball.counter] == 3) {
-      ball.x_speed = 30;
-      ball.y_speed = 16;
+      ball.x_speed = 13;
+      ball.y_speed = -7;
     } else if (outcomesArray[ball.counter] == 999) {
       ball.x_speed = 0;
       ball.y_speed = 0;
@@ -192,7 +188,7 @@ function updateBall(ball) {
     }
     ball.x += ball.x_speed;
     ball.y += ball.y_speed;
-    if (ball.y > WINDOW_HEIGHT - 20) {
+    if (ball.y > WINDOW_HEIGHT - 20 || ball.x < 100 || ball.x > 600) {
       ball.x = WINDOW_WIDTH/2;
       ball.y = -25;
       keyPressed = 0;
@@ -201,11 +197,15 @@ function updateBall(ball) {
         arrayCounter++;
         doneOnce = false;
         hitThisTime = false;
+        startTime = performance.now();
+        newKeyPressed = false;
       } else if (ball.id == 1 && ball.counter < 399) {
         ball.counter++;
         arrayCounter++;
         doneOnce = false;
         hitThisTime = false;
+        startTime = performance.now();
+        newKeyPressed = false;
       } else if (!doneWithGame) {
         alert("You've finished the game! " + hitCounter);
         outcomesArray.push(999);
@@ -223,34 +223,27 @@ function updateBall(ball) {
         doneWithGame = true;
       }
     }
-    // console.log(performance.now());
   }
+  wasKeyPressedLastTime = newKeyPressed;
 }
 
 Ball.prototype.update = function(basket) {
-  // console.log(ballAppearArray[arrayCounter] + " " + this.counter + " " + this.id);
   if (this.id == ballAppearArray[arrayCounter]) {
-    // this.x = WINDOW_WIDTH/2;
-    // this.y = 25;
-
     updateBall(this);
-  } else {
   }
 };
 
 Player.prototype.update = function() {
-  // console.log("KP: " + keyPressed + " " + timePressed);
   var timeDifference = performance.now() - timePressed;
-  // console.log(performance.now());
-  if (timeDifference > 20000) {
+  if (timeDifference > 200) {
     this.basket.move(888, 888, 0); // off the screen
     keyPressed = 0;
   } else if (keyPressed == 1) {
-    this.basket.move(WINDOW_WIDTH/2 - 25, WINDOW_HEIGHT-20, 0);
-  } else if (keyPressed == 2) {
-    this.basket.move(-15.1924, 236.603, -30); // calculated from rotation matrix for 30 degrees counterclockwise. xy coordinate in normal plane: (300-100*sqrt3, 200)
+    this.basket.move(WINDOW_WIDTH/2 - 25, WINDOW_HEIGHT-100, 0);
+  } else if (keyPressed == 2) { // rotation matrix calculator used: http://www.wolframalpha.com/widgets/view.jsp?id=bd71841fce4a834c804930bd48e7b6cf
+    this.basket.move(-15.1924, 236.603, -30); // calculated from rotation matrix for 30 degrees counterclockwise. xy coordinate in normal plane: (300-(100+12.5)*sqrt(3), 200+12.5)
   } else if (keyPressed == 3) {
-    this.basket.move(484.808, -63.3975, 30); // calculated from rotation matrix for 30 degrees clockwise. xy coordinate in normal plane: (300+100*sqrt3, 200)
+    this.basket.move(484.808, -63.3975, 30); // calculated from rotation matrix for 30 degrees clockwise. xy coordinate in normal plane: (300+(100-12.5)*sqrt(3), 200-12.5)
   }
 };
 
@@ -265,12 +258,3 @@ var update = function() {
   ball.update(player.basket);
   ball2.update(player.basket);
 };
-
-function sleep(milliseconds) {
-  var start = performance.now();
-  for (var i = 0; i < 1e7; i++) {
-    if ((performance.now() - start) > milliseconds){
-      break;
-    }
-  }
-}
