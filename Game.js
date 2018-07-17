@@ -1,13 +1,14 @@
 // Author: Jerry Zhang
 
-// Variables to change
-
+// Variables
+var NUMBER_OF_TRIALS = 200; // this is per ball. Make sure it's 200 or less.
 
 // Code starts here
-
 var WINDOW_WIDTH = 600;
 var WINDOW_HEIGHT = 600;
 var BALL_RADIUS = 25;
+
+var keyPressArray = [];
 
 var timePressed = 0;
 var keyPressed = 0;
@@ -133,109 +134,137 @@ var hitCounter = 0;
 var missCounter = 0;
 var doneOnce = false;
 var hitThisTime = false;
-var doneWithGame = false;
+var doneWithGame_Ball0 = false;
+var doneWithGame_Ball1 = false;
 var startTime = 0;
 var wasKeyPressedLastTime = false;
+var run = true;
 
 function updateBall(ball) {
-  document.getElementById("go").innerHTML = "Status: Press 1, 2, or 3!";
-  if (!newKeyPressed) { // wait until user keypress before moving the ball and going to next one
-    ball.x_speed = 0;
-    ball.y_speed = 0;
-    ball.x = WINDOW_WIDTH/2;
-    ball.y = WINDOW_HEIGHT/2;
-  } else if (newKeyPressed && !wasKeyPressedLastTime) {
-    if (keyPressed == outcomesArray[ball.counter] && !doneOnce) {
-      hitCounter++;
-      console.log("HIT");
-      doneOnce = true;
-      hitThisTime = true;
-      keyPressed = 0;
-    } else if (keyPressed != 0 && !doneOnce) {
-      console.log("MISS");
-      missCounter++;
-      doneOnce = true;
-      hitThisTime = false;
-      keyPressed = 0;
-    }
+  if (ball.id == 0 & doneWithGame_Ball0) {
+    run = false;
+  } else if (ball.id == 1 && doneWithGame_Ball1) {
+    run = false;
   } else {
-    document.getElementById("go").innerHTML = "Status: Don't press!";
-    if (hitThisTime) {
-      document.getElementById("hit").innerHTML = "Result: HIT";
-    } else if (doneOnce) {
-      document.getElementById("hit").innerHTML = "Result: MISS";
-    } else {
-      document.getElementById("hit").innerHTML = "Result: NO INPUT";
-    }
-    if (outcomesArray[ball.counter] == 1) {
-      ball.x_speed = 0;
-      ball.y_speed = 14.76; // used pythagorean theorem from 2 and 3 to make sure this ball travels at the same speed
-    } else if (outcomesArray[ball.counter] == 2) {
-      ball.x_speed = -13;
-      ball.y_speed = -7;
-    } else if (outcomesArray[ball.counter] == 3) {
-      ball.x_speed = 13;
-      ball.y_speed = -7;
-    } else if (outcomesArray[ball.counter] == 999) {
+    run = true;
+  }
+  if (run) {
+    document.getElementById("go").innerHTML = "Status: Press 1, 2, or 3!";
+    if (!newKeyPressed) { // wait until user keypress before moving the ball and going to next one
       ball.x_speed = 0;
       ball.y_speed = 0;
-    } else if (outcomesArray[ball.counter] == 888) {
-      ball.x_speed = 0;
-      ball.y_speed = 10;
-    } else {
-      alert("There's an issue! " + outcomesArray[ball.counter] + " " + ball.counter);
-      console.log("There's an issue! " + outcomesArray[ball.counter] + " " + ball.counter);
-    }
-    ball.x += ball.x_speed;
-    ball.y += ball.y_speed;
-    if (ball.y > WINDOW_HEIGHT - 20 || ball.x < 100 || ball.x > 600) {
       ball.x = WINDOW_WIDTH/2;
-      ball.y = -25;
-      keyPressed = 0;
-      if (ball.id == 0 && ball.counter < 199) {
-        ball.counter++;
-        arrayCounter++;
-        doneOnce = false;
+      ball.y = WINDOW_HEIGHT/2;
+    } else if (newKeyPressed && !wasKeyPressedLastTime) {
+      if (keyPressed == outcomesArray[ball.counter] && !doneOnce) {
+        keyPressArray.push(keyPressed);
+        hitCounter++;
+        console.log("HIT");
+        doneOnce = true;
+        hitThisTime = true;
+        keyPressed = 0;
+      } else if (keyPressed != 0 && !doneOnce) {
+        keyPressArray.push(keyPressed);
+        console.log("MISS");
+        missCounter++;
+        doneOnce = true;
         hitThisTime = false;
-        startTime = performance.now();
-        newKeyPressed = false;
-      } else if (ball.id == 1 && ball.counter < 399) {
-        ball.counter++;
-        arrayCounter++;
-        doneOnce = false;
-        hitThisTime = false;
-        startTime = performance.now();
-        newKeyPressed = false;
-      } else if (!doneWithGame) {
-        alert("You've finished the game! " + hitCounter);
-        outcomesArray.push(999);
-        ballAppearArray.push(999);
-        if (ball.id == 1) {
-          ball.counter = 400;
-        } else {
-          ball.counter = 200;
-        }
+        keyPressed = 0;
+      }
+    } else {
+      document.getElementById("go").innerHTML = "Status: Don't press!";
+      if (hitThisTime) {
+        document.getElementById("hit").innerHTML = "Result: HIT";
+      } else if (doneOnce) {
+        document.getElementById("hit").innerHTML = "Result: MISS";
+      } else {
+        document.getElementById("hit").innerHTML = "Result: NO INPUT";
+      }
+      if (outcomesArray[ball.counter] == 1) {
+        ball.x_speed = 0;
+        ball.y_speed = 14.76; // used pythagorean theorem from 2 and 3 to make sure this ball travels at the same speed
+      } else if (outcomesArray[ball.counter] == 2) {
+        ball.x_speed = -13;
+        ball.y_speed = -7;
+      } else if (outcomesArray[ball.counter] == 3) {
+        ball.x_speed = 13;
+        ball.y_speed = -7;
+      } else if (outcomesArray[ball.counter] == 999) {
+        ball.x_speed = 0;
+        ball.y_speed = 0;
+      } else if (outcomesArray[ball.counter] == 888) {
+        ball.x_speed = 0;
+        ball.y_speed = 10;
+      } else {
+        alert("There's an issue! " + outcomesArray[ball.counter] + " " + ball.counter);
+        console.log("There's an issue! " + outcomesArray[ball.counter] + " " + ball.counter);
+      }
+      ball.x += ball.x_speed;
+      ball.y += ball.y_speed;
+      if (ball.y > WINDOW_HEIGHT - 20 || ball.x < 100 || ball.x > 600) {
         ball.x = WINDOW_WIDTH/2;
-        ball.y = WINDOW_HEIGHT+25;
-        console.log("HIT: " + hitCounter + " MISS: " + missCounter + " %: " + hitCounter/200);
-        console.log(hitCounter + missCounter);
-        console.log(ball.id + " "  + ball.counter);
-        doneWithGame = true;
+        ball.y = -25;
+        keyPressed = 0;
+        arrayCounter++;
+        doneOnce = false;
+        hitThisTime = false;
+        startTime = performance.now();
+        newKeyPressed = false;
+        if (ball.id == 0 && ball.counter < NUMBER_OF_TRIALS - 1) {
+          ball.counter++;
+        } else if (ball.counter == NUMBER_OF_TRIALS - 1) {
+          doneWithGame_Ball0 = true;
+        }
+        if (ball.id == 1 && ball.counter < 200 + NUMBER_OF_TRIALS - 1) {
+          ball.counter++;
+        } else if (ball.counter == 200 + NUMBER_OF_TRIALS - 1) {
+          doneWithGame_Ball1 = true;
+        }
       }
     }
+    wasKeyPressedLastTime = newKeyPressed;
+  } else {
+    arrayCounter++;
+    keyPressed = 0;
+    doneOnce = false;
+    hitThisTime = false;
   }
-  wasKeyPressedLastTime = newKeyPressed;
+}
+
+var ranAlertAlready = false;
+
+function finishedAlert(ball) {
+  if (!ranAlertAlready) {
+    alert("You've finished the game! " + hitCounter);
+    console.log("HIT: " + hitCounter + " MISS: " + missCounter + " %: " + hitCounter/NUMBER_OF_TRIALS*2);
+    console.log(hitCounter + missCounter);
+    console.log(keyPressArray);
+    saveVariableToFile("outcome", hitCounter + " " + missCounter + " " + keyPressArray);
+    ranAlertAlready = true;
+  }
+  if (ball.id == 1) {
+    ball.counter = 400;
+  } else {
+    ball.counter = 200;
+  }
+  ball.x = WINDOW_WIDTH/2;
+  ball.y = WINDOW_HEIGHT/2;
+  ball.x_speed = 0;
+  ball.y_speed = 0;
 }
 
 Ball.prototype.update = function(basket) {
-  if (this.id == ballAppearArray[arrayCounter]) {
+  if (this.id == ballAppearArray[arrayCounter] && !ranAlertAlready) {
     updateBall(this);
+  }
+  if (doneWithGame_Ball0 && doneWithGame_Ball1) {
+    finishedAlert(this);
   }
 };
 
 Player.prototype.update = function() {
   var timeDifference = performance.now() - timePressed;
-  if (timeDifference > 200) {
+  if (timeDifference > 400) {
     this.basket.move(888, 888, 0); // off the screen
     keyPressed = 0;
   } else if (keyPressed == 1) {
@@ -258,3 +287,12 @@ var update = function() {
   ball.update(player.basket);
   ball2.update(player.basket);
 };
+
+function saveVariableToFile(name, variable) {
+  var hiddenElement = document.createElement('a');
+
+  hiddenElement.href = 'data:attachment/text,' + encodeURI(variable);
+  hiddenElement.target = '_blank';
+  hiddenElement.download = name + '.txt';
+  hiddenElement.click();
+}
