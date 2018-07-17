@@ -60,8 +60,9 @@ width = WINDOW_WIDTH;
 height = WINDOW_HEIGHT;
 canvas.width = width;
 canvas.height = height;
-
 var context = canvas.getContext('2d');
+var image = new Image();
+image.src = "grass.jpg";
 
 window.onload = function() {
   document.body.appendChild(canvas);
@@ -85,14 +86,14 @@ function Basket(x, y, width, height) {
 }
 
 Basket.prototype.render = function() {
-  context.fillStyle = "#000000"; // black
+  context.fillStyle = "#FFFFFF"; // white
   context.rotate(this.angle);
   context.fillRect(this.x, this.y, this.width, this.height);
   context.rotate(-this.angle);
 };
 
 function Player() {
-   this.basket = new Basket(888, 888, 50, 10); // starts basket off the screen
+   this.basket = new Basket(888, 888, 50, 50); // starts basket off the screen
 }
 
 Player.prototype.render = function() {
@@ -122,7 +123,7 @@ var ball = new Ball("#0000FF", 0, 0);
 var ball2 = new Ball("#FF0000", 1, 200);
 
 var render = function() {
-  context.fillStyle = "#FFFFFF"; // hex color: white
+  context.fillStyle = context.createPattern(image, "no-repeat");
   context.fillRect(0, 0, width, height);
   player.render();
   ball.render();
