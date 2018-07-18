@@ -19,7 +19,7 @@ document.addEventListener("keydown", function(event) {
   var key = event.keyCode;
   if (lastKeyPressed == key) {
     keyPressed = 0;
-    console.log("HELD DOWN " + keyPressed);
+    console.log("HELD DOWN");
   } else if (key == 49 || key == 97) {
     timePressed = performance.now();
     console.log("1 Pressed");
@@ -139,6 +139,7 @@ var doneWithGame_Ball0 = false;
 var doneWithGame_Ball1 = false;
 var startTime = 0;
 var wasKeyPressedLastTime = false;
+var displayRectangle = false;
 var run = true;
 
 function updateBall(ball) {
@@ -151,12 +152,12 @@ function updateBall(ball) {
   }
   if (run) {
     document.getElementById("go").innerHTML = "Status: Press 1, 2, or 3!";
-    if (!newKeyPressed) { // wait until user keypress before moving the ball and going to next one
+    if (performance.now() - startTime < 5000) { // wait until user keypress before moving the ball and going to next one
+      displayRectangle = true;
       ball.x_speed = 0;
       ball.y_speed = 0;
       ball.x = WINDOW_WIDTH/2;
       ball.y = WINDOW_HEIGHT/2;
-    } else if (newKeyPressed && !wasKeyPressedLastTime) {
       if (keyPressed == outcomesArray[ball.counter] && !doneOnce) {
         keyPressArray.push(keyPressed);
         hitCounter++;
@@ -203,6 +204,7 @@ function updateBall(ball) {
       ball.x += ball.x_speed;
       ball.y += ball.y_speed;
       if (ball.y > WINDOW_HEIGHT - 20 || ball.x < 100 || ball.x > 600) {
+        displayRectangle = false;
         ball.x = WINDOW_WIDTH/2;
         ball.y = -25;
         keyPressed = 0;
@@ -265,7 +267,7 @@ Ball.prototype.update = function(basket) {
 
 Player.prototype.update = function() {
   var timeDifference = performance.now() - timePressed;
-  if (timeDifference > 400) {
+  if (!displayRectangle) {
     this.basket.move(888, 888, 0); // off the screen
     keyPressed = 0;
   } else if (keyPressed == 1) {
