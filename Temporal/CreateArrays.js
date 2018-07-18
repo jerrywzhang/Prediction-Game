@@ -11,7 +11,7 @@ First array: 1, 2, or 3 for where the ball will end up
 Second array: 0 or 1 for which ball
 */
 
-var timesFile = 'https://raw.githubusercontent.com/thejwzhang/Prediction-Game/master/Times.txt?token=AL5t4MXDHCFQN_6nV3q6B_bkwe4szjFIks5bWMPXwA%3D%3D'
+var timesFile = 'https://raw.githubusercontent.com/thejwzhang/Prediction-Game/master/Times.txt?token=AL5t4C9A02To6e5Xu7CUGYmhj0Lq3GMmks5bWNQPwA%3D%3D'
 /*
 Times.txt File Format:
 a
