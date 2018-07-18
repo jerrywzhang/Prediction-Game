@@ -1,7 +1,9 @@
 // Author: Jerry Zhang
 
 // Variables
-var NUMBER_OF_TRIALS = 200; // this is per ball. Make sure it's 200 or less.
+var NUMBER_OF_TRIALS = 100; // this is per ball. Make sure it's 200 or less.
+var TIME_TO_WAIT = 2000; // in ms
+var BREAK_TIME = 1000; // in ms
 
 // Code starts here
 var WINDOW_WIDTH = 600;
@@ -16,35 +18,37 @@ var lastKeyPressed = 0;
 var newKeyPressed = false;
 
 document.addEventListener("keydown", function(event) {
-  var key = event.keyCode;
-  if (!newKeyPressed) {
-    if (lastKeyPressed == key) {
-      keyPressed = 0;
-      console.log("HELD DOWN");
-    } else if (key == 49 || key == 97) {
-      timePressed = performance.now();
-      console.log("1 Pressed");
-      keyPressed = 1;
-      newKeyPressed = true;
-      displayRectangle = true;
-    } else if (key == 50 || key == 98) {
-      timePressed = performance.now();
-      console.log("2 Pressed");
-      keyPressed = 2;
-      newKeyPressed = true;
-      displayRectangle = true;
-    } else if (key == 51 || key == 99) {
-      timePressed = performance.now();
-      console.log("3 Pressed");
-      keyPressed = 3;
-      newKeyPressed = true;
-      displayRectangle = true;
-    } else {
-      // console.log("Key Number " + key + " Pressed");
-      keyPressed = 0;
-      newKeyPressed = false;
+  if (!breakTimeBool) {
+    var key = event.keyCode;
+    if (!newKeyPressed) {
+      if (lastKeyPressed == key) {
+        keyPressed = 0;
+        console.log("HELD DOWN");
+      } else if (key == 49 || key == 97) {
+        timePressed = performance.now();
+        console.log("1 Pressed");
+        keyPressed = 1;
+        newKeyPressed = true;
+        displayRectangle = true;
+      } else if (key == 50 || key == 98) {
+        timePressed = performance.now();
+        console.log("2 Pressed");
+        keyPressed = 2;
+        newKeyPressed = true;
+        displayRectangle = true;
+      } else if (key == 51 || key == 99) {
+        timePressed = performance.now();
+        console.log("3 Pressed");
+        keyPressed = 3;
+        newKeyPressed = true;
+        displayRectangle = true;
+      } else {
+        // console.log("Key Number " + key + " Pressed");
+        keyPressed = 0;
+        newKeyPressed = false;
+      }
+      lastKeyPressed = key;
     }
-    lastKeyPressed = key;
   }
 });
 
@@ -115,7 +119,7 @@ function Ball(color, id, counter) {
   this.id = id;
   this.counter = counter;
 }
-1
+
 Ball.prototype.render = function() {
   context.beginPath();
   context.arc(this.x, this.y, this.radius, 2 * Math.PI, false);
@@ -127,14 +131,6 @@ var player = new Player();
 var ball = new Ball("#0000FF", 0, 0);
 var ball2 = new Ball("#FF0000", 1, 200);
 
-var render = function() {
-  context.fillStyle = context.createPattern(image, "no-repeat");
-  context.fillRect(0, 0, width, height);
-  player.render();
-  ball.render();
-  ball2.render();
-};
-
 var arrayCounter = 0;
 var hitCounter = 0;
 var missCounter = 0;
@@ -145,19 +141,40 @@ var doneWithGame_Ball1 = false;
 var startTime = 0;
 var displayRectangle = false;
 var run = true;
+var breakTimeBool = false;
+
+var render = function() {
+  if (performance.now() - startTime < BREAK_TIME) {
+    breakTimeBool = true;
+    context.fillStyle = "#FFFFFF";
+    context.fillRect(0, 0, width, height);
+    document.getElementById("go").innerHTML = "Status: Break!";
+    // keyPressed = 0;
+    // doneOnce = false;
+    // hitThisTime = false;
+  } else {
+    breakTimeBool = false;
+    context.fillStyle = context.createPattern(image, "no-repeat");
+    context.fillRect(0, 0, width, height);
+    player.render();
+    ball.render();
+    ball2.render();
+  }
+};
 
 function updateBall(ball) {
   if (ball.id == 0 & doneWithGame_Ball0) {
     run = false;
+    console.log("Ball 0 done.");
   } else if (ball.id == 1 && doneWithGame_Ball1) {
     run = false;
+    console.log("Ball 1 done.");
   } else {
     run = true;
   }
   if (run) {
-    console.log("DISPLAY RECTANGLE " + displayRectangle);
-    timeRemaining = 5000 - performance.now() + startTime;
-    if (performance.now() - startTime < 5000) { // wait until user keypress before moving the ball and going to next one
+    timeRemaining = TIME_TO_WAIT + 1000 - performance.now() + startTime;
+    if (performance.now() - startTime < TIME_TO_WAIT + 1000) { // wait before moving the ball and going to break time
       document.getElementById("go").innerHTML = "Status: Press 1, 2, or 3 in the next " + Math.round(timeRemaining/1000 + 0.5) + " seconds!";
       // console.log(startTime);
       ball.x_speed = 0;
@@ -212,7 +229,6 @@ function updateBall(ball) {
       ball.x += ball.x_speed;
       ball.y += ball.y_speed;
       if (ball.y > WINDOW_HEIGHT - 20 || ball.x < 100 || ball.x > 600) {
-        console.log("um");
         ball.x = WINDOW_WIDTH/2;
         ball.y = -25;
         keyPressed = 0;
@@ -231,10 +247,14 @@ function updateBall(ball) {
         } else if (ball.counter == 200 + NUMBER_OF_TRIALS - 1) {
           doneWithGame_Ball1 = true;
         }
-
         displayRectangle = false;
       }
     }
+  } else {
+    arrayCounter++;
+    keyPressed = 0;
+    doneOnce = false;
+    hitThisTime = false;
   }
 }
 
@@ -243,7 +263,7 @@ var ranAlertAlready = false;
 function finishedAlert(ball) {
   if (!ranAlertAlready) {
     alert("You've finished the game! " + hitCounter);
-    console.log("HIT: " + hitCounter + " MISS: " + missCounter + " %: " + hitCounter/NUMBER_OF_TRIALS*2);
+    console.log("HIT: " + hitCounter + " MISS: " + missCounter + " %: " + 100*(hitCounter/(NUMBER_OF_TRIALS*2)));
     console.log(hitCounter + missCounter);
     console.log(keyPressArray);
     saveVariableToFile("outcome", hitCounter + " " + missCounter + " " + keyPressArray);
