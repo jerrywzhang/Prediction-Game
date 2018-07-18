@@ -47,7 +47,7 @@ function readFile(callback) {
 
 function createOutcomes(linesFromFile, callback) { // Creates 2 lists: one list for which place (1,2, or 3) a ball is going. The other for which ball appears (1 or 2)
   // Create list for which ball appears: either 0 or 1.
-  for (i = 0; i < NUMBER_OF_TOTAL_TRIES; i++) {
+  for (var i = 0; i < NUMBER_OF_TOTAL_TRIES; i++) {
     ballAppearArray.push(Math.floor(Math.random() * Math.floor(2)));
   }
 

@@ -172,8 +172,8 @@ function updateBall(ball) {
     run = true;
   }
   if (run) {
-    timeRemaining = TIME_TO_WAIT + 1000 - performance.now() + startTime;
-    if (performance.now() - startTime < TIME_TO_WAIT + 1000) { // wait before moving the ball and going to break time
+    timeRemaining = TIME_TO_WAIT + BREAK_TIME - performance.now() + startTime;
+    if (performance.now() - startTime < TIME_TO_WAIT + BREAK_TIME) { // wait before moving the ball and going to break time
       document.getElementById("go").innerHTML = "Status: Press 1, 2, or 3 in the next " + Math.round(timeRemaining/1000 + 0.5) + " seconds!";
       // console.log(startTime);
       ball.x_speed = 0;
