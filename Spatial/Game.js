@@ -144,9 +144,9 @@ var run = true;
 var breakTimeBool = false;
 
 var render = function() {
+  context.fillStyle = context.createPattern(image, "no-repeat");
   if (performance.now() - startTime < BREAK_TIME) {
     breakTimeBool = true;
-    context.fillStyle = "#FFFFFF";
     context.fillRect(0, 0, width, height);
     document.getElementById("go").innerHTML = "Status: Break!";
     // keyPressed = 0;
@@ -154,7 +154,6 @@ var render = function() {
     // hitThisTime = false;
   } else {
     breakTimeBool = false;
-    context.fillStyle = context.createPattern(image, "no-repeat");
     context.fillRect(0, 0, width, height);
     player.render();
     ball.render();
