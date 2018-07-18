@@ -17,30 +17,32 @@ var newKeyPressed = false;
 
 document.addEventListener("keydown", function(event) {
   var key = event.keyCode;
-  if (lastKeyPressed == key) {
-    keyPressed = 0;
-    console.log("HELD DOWN");
-  } else if (key == 49 || key == 97) {
-    timePressed = performance.now();
-    console.log("1 Pressed");
-    keyPressed = 1;
-    newKeyPressed = true;
-  } else if (key == 50 || key == 98) {
-    timePressed = performance.now();
-    console.log("2 Pressed");
-    keyPressed = 2;
-    newKeyPressed = true;
-  } else if (key == 51 || key == 99) {
-    timePressed = performance.now();
-    console.log("3 Pressed");
-    keyPressed = 3;
-    newKeyPressed = true;
-  } else {
-    // console.log("Key Number " + key + " Pressed");
-    keyPressed = 0;
-    newKeyPressed = false;
+  if (!newKeyPressed) {
+    if (lastKeyPressed == key) {
+      keyPressed = 0;
+      console.log("HELD DOWN");
+    } else if (key == 49 || key == 97) {
+      timePressed = performance.now();
+      console.log("1 Pressed");
+      keyPressed = 1;
+      newKeyPressed = true;
+    } else if (key == 50 || key == 98) {
+      timePressed = performance.now();
+      console.log("2 Pressed");
+      keyPressed = 2;
+      newKeyPressed = true;
+    } else if (key == 51 || key == 99) {
+      timePressed = performance.now();
+      console.log("3 Pressed");
+      keyPressed = 3;
+      newKeyPressed = true;
+    } else {
+      // console.log("Key Number " + key + " Pressed");
+      keyPressed = 0;
+      newKeyPressed = false;
+    }
+    lastKeyPressed = key;
   }
-  lastKeyPressed = key;
 });
 
 document.addEventListener("keyup", function(event) {
