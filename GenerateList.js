@@ -2,7 +2,7 @@
 
 var NUMBER_OF_TOTAL_TRIES = 400;
 var NUMBER_OF_DIFFERENT_PROBABILITIES = 8;
-var probabilitiesFile = 'https://gist.githubusercontent.com/thejwzhang/af7517ff59667192288320db2205f6f8/raw/c735aa95d117b0b87353d88fc9834dd460f5f75d/Probabilities.txt';
+var probabilitiesFile = 'https://raw.githubusercontent.com/thejwzhang/Prediction-Game/master/Probabilities.txt?token=AL5t4L8fjZznzebdLsxYIh6mx05drD8Zks5bWMLuwA%3D%3D';
 /*
 Probabilities.txt File Format:
 

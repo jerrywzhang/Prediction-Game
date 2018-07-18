@@ -1,6 +1,6 @@
 // Author: Jerry Zhang
 
-var arraysFile = 'https://gist.githubusercontent.com/thejwzhang/6ad2b58a35de10f15b71856d5e30b212/raw/1e9eebd7d2bf5958da008c203569b8f22e9a5a9c/Arrays.txt';
+var arraysFile = 'https://raw.githubusercontent.com/thejwzhang/Prediction-Game/master/Arrays.txt?token=AL5t4CuxfqMdAKM51yfetkr6TJGi92Nwks5bWMK-wA%3D%3D';
 /*
 Arrays.txt File Format:
 x,y,z,a,b,....Nx,y,z,a,b,c....
