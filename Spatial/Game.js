@@ -26,16 +26,19 @@ document.addEventListener("keydown", function(event) {
       console.log("1 Pressed");
       keyPressed = 1;
       newKeyPressed = true;
+      displayRectangle = true;
     } else if (key == 50 || key == 98) {
       timePressed = performance.now();
       console.log("2 Pressed");
       keyPressed = 2;
       newKeyPressed = true;
+      displayRectangle = true;
     } else if (key == 51 || key == 99) {
       timePressed = performance.now();
       console.log("3 Pressed");
       keyPressed = 3;
       newKeyPressed = true;
+      displayRectangle = true;
     } else {
       // console.log("Key Number " + key + " Pressed");
       keyPressed = 0;
@@ -140,7 +143,6 @@ var hitThisTime = false;
 var doneWithGame_Ball0 = false;
 var doneWithGame_Ball1 = false;
 var startTime = 0;
-var wasKeyPressedLastTime = false;
 var displayRectangle = false;
 var run = true;
 
@@ -153,14 +155,17 @@ function updateBall(ball) {
     run = true;
   }
   if (run) {
-    document.getElementById("go").innerHTML = "Status: Press 1, 2, or 3!";
+    console.log("DISPLAY RECTANGLE " + displayRectangle);
+    timeRemaining = 5000 - performance.now() + startTime;
     if (performance.now() - startTime < 5000) { // wait until user keypress before moving the ball and going to next one
-      displayRectangle = true;
+      document.getElementById("go").innerHTML = "Status: Press 1, 2, or 3 in the next " + Math.round(timeRemaining/1000 + 0.5) + " seconds!";
+      // console.log(startTime);
       ball.x_speed = 0;
       ball.y_speed = 0;
       ball.x = WINDOW_WIDTH/2;
       ball.y = WINDOW_HEIGHT/2;
       if (keyPressed == outcomesArray[ball.counter] && !doneOnce) {
+        displayRectangle = true;
         keyPressArray.push(keyPressed);
         hitCounter++;
         console.log("HIT");
@@ -168,6 +173,7 @@ function updateBall(ball) {
         hitThisTime = true;
         keyPressed = 0;
       } else if (keyPressed != 0 && !doneOnce) {
+        displayRectangle = true;
         keyPressArray.push(keyPressed);
         console.log("MISS");
         missCounter++;
@@ -206,7 +212,7 @@ function updateBall(ball) {
       ball.x += ball.x_speed;
       ball.y += ball.y_speed;
       if (ball.y > WINDOW_HEIGHT - 20 || ball.x < 100 || ball.x > 600) {
-        displayRectangle = false;
+        console.log("um");
         ball.x = WINDOW_WIDTH/2;
         ball.y = -25;
         keyPressed = 0;
@@ -225,14 +231,10 @@ function updateBall(ball) {
         } else if (ball.counter == 200 + NUMBER_OF_TRIALS - 1) {
           doneWithGame_Ball1 = true;
         }
+
+        displayRectangle = false;
       }
     }
-    wasKeyPressedLastTime = newKeyPressed;
-  } else {
-    arrayCounter++;
-    keyPressed = 0;
-    doneOnce = false;
-    hitThisTime = false;
   }
 }
 
@@ -268,7 +270,8 @@ Ball.prototype.update = function(basket) {
 };
 
 Player.prototype.update = function() {
-  var timeDifference = performance.now() - timePressed;
+  // var timeDifference = performance.now() - timePressed;
+  // console.log(displayRectangle);
   if (!displayRectangle) {
     this.basket.move(888, 888, 0); // off the screen
     keyPressed = 0;
