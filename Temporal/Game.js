@@ -10,6 +10,9 @@ var WINDOW_WIDTH = 600;
 var WINDOW_HEIGHT = 600;
 var BALL_RADIUS = 25;
 
+var yesSound = new Audio('../ding.mp3');
+var noSound = new Audio('../buzzer.mp3')
+
 var keyPressArray = [];
 
 var timePressed = 0;
@@ -197,11 +200,14 @@ function updateBall(ball) {
     } else {
       document.getElementById("go").innerHTML = "Status: Don't press!";
       if (hitThisTime) {
-        document.getElementById("hit").innerHTML = "Result: HIT";
+        // document.getElementById("hit").innerHTML = "Result: HIT";
+        yesSound.play();
       } else if (doneOnce) {
-        document.getElementById("hit").innerHTML = "Result: MISS";
+        // document.getElementById("hit").innerHTML = "Result: MISS";
+        noSound.play();
       } else {
-        document.getElementById("hit").innerHTML = "Result: NO INPUT";
+        // document.getElementById("hit").innerHTML = "Result: NO INPUT";
+        noSound.play();
       }
       // if (outcomesArray[ball.counter] == 1) {
       ball.x_speed = 0;
