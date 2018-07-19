@@ -24,13 +24,13 @@ document.addEventListener("keydown", function(event) {
       if (lastKeyPressed == key) {
         keyPressed = 0;
         console.log("HELD DOWN");
-      } else if (key == 49 || key == 97 || key == 37) {
+      } else if (key == 49 || key == 97 || key == 38 || key == 40) {
         timePressed = performance.now();
         console.log("1 Pressed");
         keyPressed = 1;
         newKeyPressed = true;
         displayRectangle = true;
-      } else if (key == 50 || key == 98 || key == 38) {
+      } else if (key == 50 || key == 98 || key == 37) {
         timePressed = performance.now();
         console.log("2 Pressed");
         keyPressed = 2;
