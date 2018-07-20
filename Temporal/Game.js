@@ -20,6 +20,8 @@ var keyPressed = 0;
 var lastKeyPressed = 0;
 var newKeyPressed = false;
 
+var firstTimeRunningElse = true;
+
 document.addEventListener("keydown", function(event) {
   if (!breakTimeBool) {
     var key = event.keyCode;
@@ -197,17 +199,23 @@ function updateBall(ball) {
         hitThisTime = false;
         keyPressed = 0;
       }
+      firstTimeRunningElse = true;
     } else {
       document.getElementById("go").innerHTML = "Status: Don't press!";
-      if (hitThisTime) {
-        // document.getElementById("hit").innerHTML = "Result: HIT";
-        yesSound.play();
-      } else if (doneOnce) {
-        // document.getElementById("hit").innerHTML = "Result: MISS";
-        noSound.play();
-      } else {
-        // document.getElementById("hit").innerHTML = "Result: NO INPUT";
-        noSound.play();
+      if (firstTimeRunningElse) {
+        if (hitThisTime) {
+          // document.getElementById("hit").innerHTML = "Result: HIT";
+          yesSound.play();
+        } else if (doneOnce) {
+          // document.getElementById("hit").innerHTML = "Result: MISS";
+          noSound.play();
+        } else {
+          // document.getElementById("hit").innerHTML = "Result: NO INPUT";
+          console.log("NO INPUT");
+          keyPressArray.push(0);
+          noSound.play();
+        }
+        firstTimeRunningElse = false;
       }
       // if (outcomesArray[ball.counter] == 1) {
       ball.x_speed = 0;
