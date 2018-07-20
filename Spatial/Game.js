@@ -273,6 +273,8 @@ function updateBall(ball) {
 
 var ranAlertAlready = false;
 
+var postURL = 'https://script.google.com/macros/s/AKfycbx2ptyDxNWvgSBPrIaSx5PYlqwQg2Ip_qI_tnZy-tGjW-Xu0kM/exec';
+
 function finishedAlert(ball) {
   if (!ranAlertAlready) {
     alert("You've finished the game! " + hitCounter);
@@ -281,6 +283,12 @@ function finishedAlert(ball) {
     console.log(keyPressArray);
     saveVariableToFile("outcome", hitCounter + " " + missCounter + " " + keyPressArray);
     ranAlertAlready = true;
+    var today = new Date();
+    var date = (today.getMonth()+1)+'/'+today.getDate() + '/' + today.getFullYear();
+    var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+    var dateTime = date+' '+time;
+    var generatedURL = postURL + "?Time=" + dateTime + "&Hit=" + hitCounter + "&Miss=" + missCounter + "&KeyPressArray=" + keyPressArray;
+    OpenInNewTabWinBrowser(generatedURL);
     window.location.href = '../next.html';
   }
   if (ball.id == 1) {
@@ -338,4 +346,9 @@ function saveVariableToFile(name, variable) {
   hiddenElement.target = '_blank';
   hiddenElement.download = name + '.txt';
   hiddenElement.click();
+}
+
+function OpenInNewTabWinBrowser(url) {
+  console.log(window.open(url, '_blank'));
+  console.log("WHAT");
 }
