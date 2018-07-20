@@ -10,8 +10,8 @@ var WINDOW_WIDTH = 600;
 var WINDOW_HEIGHT = 600;
 var BALL_RADIUS = 25;
 
-var yesSound = new Audio('../ding.mp3');
-var noSound = new Audio('../buzzer.mp3')
+var yesSound = new Audio('../Assets/Sounds/ding.mp3');
+var noSound = new Audio('../Assets/Sounds/buzzer.mp3')
 
 var keyPressArray = [];
 
@@ -74,7 +74,7 @@ canvas.width = width;
 canvas.height = height;
 var context = canvas.getContext('2d');
 var image = new Image();
-image.src = "../background.jpg";
+image.src = "../Assets/Background/background.jpg";
 
 window.onload = function() {
   document.body.appendChild(canvas);
