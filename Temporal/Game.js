@@ -270,7 +270,7 @@ function finishedAlert(ball) {
     console.log(keyPressArray);
     saveVariableToFile("outcome", hitCounter + " " + missCounter + " " + keyPressArray);
     ranAlertAlready = true;
-    window.location.href = './finished.html';
+    window.location.href = '../finished.html';
   }
   if (ball.id == 1) {
     ball.counter = 400;
