@@ -219,7 +219,7 @@ function updateBall(ball) {
       }
       // if (outcomesArray[ball.counter] == 1) {
       ball.x_speed = 0;
-      ball.y_speed = 15; // used pythagorean theorem from 2 and 3 to make sure this ball travels at the same speed. originally 14.76
+      ball.y_speed = 50;
       // } else if (outcomesArray[ball.counter] == 2) {
       //   ball.x_speed = -13;
       //   ball.y_speed = -7;
