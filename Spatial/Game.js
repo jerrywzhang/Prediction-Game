@@ -74,7 +74,7 @@ canvas.width = width;
 canvas.height = height;
 var context = canvas.getContext('2d');
 var image = new Image();
-image.src = "grass.jpg";
+image.src = "../background.jpg";
 
 window.onload = function() {
   document.body.appendChild(canvas);
@@ -98,7 +98,7 @@ function Basket(x, y, width, height) {
 }
 
 Basket.prototype.render = function() {
-  context.fillStyle = "#FFFFFF"; // white
+  context.fillStyle = "#000000"; // black
   context.rotate(this.angle);
   context.fillRect(this.x, this.y, this.width, this.height);
   context.rotate(-this.angle);
@@ -214,13 +214,13 @@ function updateBall(ball) {
       }
       if (outcomesArray[ball.counter] == 1) {
         ball.x_speed = 0;
-        ball.y_speed = 14.76; // used pythagorean theorem from 2 and 3 to make sure this ball travels at the same speed
+        ball.y_speed = 50;
       } else if (outcomesArray[ball.counter] == 2) {
-        ball.x_speed = -13;
-        ball.y_speed = -7;
+        ball.x_speed = -43.3
+        ball.y_speed = -25;
       } else if (outcomesArray[ball.counter] == 3) {
-        ball.x_speed = 13;
-        ball.y_speed = -7;
+        ball.x_speed = 43.3;
+        ball.y_speed = -25;
       } else if (outcomesArray[ball.counter] == 999) {
         ball.x_speed = 0;
         ball.y_speed = 0;
@@ -303,9 +303,10 @@ Player.prototype.update = function() {
   } else if (keyPressed == 1) {
     this.basket.move(WINDOW_WIDTH/2 - 25, WINDOW_HEIGHT-100, 0);
   } else if (keyPressed == 2) { // rotation matrix calculator used: http://www.wolframalpha.com/widgets/view.jsp?id=bd71841fce4a834c804930bd48e7b6cf
-    this.basket.move(-15.1924, 236.603, -30); // calculated from rotation matrix for 30 degrees counterclockwise. xy coordinate in normal plane: (300-(100+12.5)*sqrt(3), 200+12.5)
+    this.basket.move(9.81-25, 237-50, -30); // calculated from rotation matrix for 30 degrees counterclockwise. xy coordinate in normal plane: (300-(100)*sqrt(3), 200)
+                                            // then translated 25 left (+25), 50 up (-50).
   } else if (keyPressed == 3) {
-    this.basket.move(484.808, -63.3975, 30); // calculated from rotation matrix for 30 degrees clockwise. xy coordinate in normal plane: (300+(100-12.5)*sqrt(3), 200-12.5)
+    this.basket.move(510-25, -63.4-50, 30); // calculated from rotation matrix for 30 degrees clockwise. xy coordinate in normal plane: (300+(100-12.5)*sqrt(3), 200-12.5)
   }
 };
 
