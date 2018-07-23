@@ -2,7 +2,7 @@
 
 // Variables
 var NUMBER_OF_TRIALS = 100; // this is per ball. Make sure it's 200 or less.
-var TIME_TO_WAIT = 2000; // in ms
+var TIME_TO_WAIT = 1500; // in ms
 var BREAK_TIME = 1000; // in ms
 
 // Code starts here
