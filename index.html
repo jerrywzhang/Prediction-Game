@@ -22,7 +22,7 @@
     <h5>Before we begin, please read the instructions on how to play the game.</h5>
     <ul class="w3-ul w3-padding-16">
       <li>1. IMPORTANT: Make sure you are using Google Chrome on fullscreen.</li>
-      <li>2. IMPORTANT: Enable Popups! 
+      <li>2. IMPORTANT: Enable Popups!
         <a href="./Assets/popups.jpg" target="new">Click for Instructions</a>
       </li>
       <li>2. Close all other open applications. The game may lag if you don't do this.</li>
@@ -42,6 +42,23 @@
       <p><a href="./credits.html">Licenses and Credits</a><p>
     </div>
   </div>
-
+  <script>
+    popup = window.open('./popup.html', '_blank');
+    setTimeout(function () {
+      if (!popup || popup.closed || typeof popup.closed == 'undefined' || parseInt(popup.outerWidth) == 0) {
+          alert('Please turn off pop-up blocker (click the link in the 2nd instruction) and reload.');
+      }
+      else {
+          popup.focus();
+      }
+    }, 500);
+    var w = window.innerWidth;
+    var h = window.innerHeight;
+    console.log(w);
+    console.log(h);
+    if (w < 800 || h < 800) {
+      alert('Please increase your window size!');
+    }
+  </script>
 </body>
 </html>
