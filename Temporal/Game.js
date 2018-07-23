@@ -294,7 +294,7 @@ function finishedAlert(ball) {
     var date = (today.getMonth() + 1) + '/' + today.getDate() + '/' + today.getFullYear();
     var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
     var dateAndTime = date + ' ' + time;
-    var generatedURL = postURL + "?IP=" + ipAddress + "&Time=" + dateAndTime + "&Hit=" + hitCounter + "&Miss=" + missCounter + "&KeyPressArray=" + keyPressArray "&CorrectKeyPressArray=" + correctResponseArray + "&BallAppearArray=" + ballAppearArray;
+    var generatedURL = postURL + "?IP=" + ipAddress + "&Time=" + dateAndTime + "&Hit=" + hitCounter + "&Miss=" + missCounter + "&KeyPressArray=" + keyPressArray "&CorrectKeyPressArray=" + correctResponseArray + "&BallAppearArray=" + ballAppearArray + "&TimePressArray=" + timePressedArray + "&CorrectTimeAppearArray=" + correctTimeAppearArray;
     OpenInNewTabWinBrowser(generatedURL);
     window.location.href = '../finished.html';
   }
