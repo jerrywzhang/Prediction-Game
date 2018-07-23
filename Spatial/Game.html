@@ -8,15 +8,6 @@
 </head>
 <body>
   <script>
-    popup = window.open('./popup.html', '_blank');
-    setTimeout(function () {
-      if (!popup || popup.closed || typeof popup.closed == 'undefined' || parseInt(popup.outerWidth) == 0) {
-        alert('Please turn off pop-up blocker (click the link in the 2nd instruction) and reload.');
-      }
-      else {
-        popup.focus();
-      }
-    }, 500);
     var w = window.innerWidth;
     var h = window.innerHeight;
     console.log(w);
@@ -25,6 +16,7 @@
       alert('Please increase your window size and reload!');
     }
   </script>
+
   <p id="go">Status: ____</p>
   <!-- <p id="hit">Result: ____</p> -->
   <script type="text/javascript" src="ReadList.js"></script>

@@ -20,14 +20,27 @@ Lines 5-8: Probabilities for ball 2
 Lines 1-8: The 3 numbers in each line add up to 1.
 */
 
+var timesFile = 'https://raw.githubusercontent.com/thejwzhang/Prediction-Game/master/Assets/Times.txt?token=AL5t4OLC7dr9yEUt5NOth4yKK_FRShzeks5bWz6qwA%3D%3D'
+/*
+Times.txt File Format:
+a
+b
+c
+d
+
+where a, b, c, and d are times in ms used as the mean times for the temporal test.
+*/
 
 readFile(createOutcomes);
+readTimesFile(generateTimesArray);
 
 //Functions
 var finalProbabilitiesList = [];
 var outcomesArray = [];
 var ballAppearArray = [];
+var timeAppearArray = [];
 var done = false;
+var timesFileLines = [];
 
 function readFile(callback) {
   var txtFile = new XMLHttpRequest();
@@ -131,8 +144,52 @@ function getResult(done) { // called as the callback of createOutcomes
 
   var hiddenElement = document.createElement('a');
 
-  hiddenElement.href = 'data:attachment/text,' + encodeURI(outcomesArray) + "N" + encodeURI(ballAppearArray);
+  hiddenElement.href = 'data:attachment/text,' + encodeURI(outcomesArray) + "N" + encodeURI(ballAppearArray) + "N" + encodeURI(timeAppearArray);
   hiddenElement.target = '_blank';
   hiddenElement.download = 'Arrays.txt';
   hiddenElement.click();
+}
+
+
+function readTimesFile(callback) {
+  var txtFile = new XMLHttpRequest();
+  txtFile.open("GET", timesFile, true);
+  txtFile.onreadystatechange = function() {
+    if (txtFile.readyState === 4) {  // Ready to parse
+      if (txtFile.status === 200) {  // File found
+        allText = txtFile.responseText;
+        timesFileLines = allText.split("\n"); // Separates the two arrays by looking for "N"
+        // console.log(lines);
+        callback(printTimeResult);
+      }
+    }
+  }
+  txtFile.send(null);
+}
+
+function generateTimesArray(callback) {
+  for (var time in timesFileLines) {
+    if (timesFileLines[time] > 0) {
+      for (var i = 0; i < NUMBER_OF_TOTAL_TRIES/NUMBER_OF_DIFFERENT_PROBABILITIES; i++) {
+        timeAppearArray.push(Math.round((gaussianRand() * 500) - 250 + Number(timesFileLines[time]))); // range: 500. mean: time.
+      }
+    }
+  }
+  callback(done);
+}
+
+function gaussianRand() { // generates an approximately Gaussian random number distributed from 0 to 1.
+  var rand = 0;
+  for (var i = 0; i < 6; i++) {
+    rand += Math.random();
+  }
+  return rand / 6;
+}
+
+function printTimeResult(done) {
+  if (done != true) {
+    alert("The time array was not created properly!");
+    console.log("The time array was not created properly!");
+  }
+  console.log("Times: " + timeAppearArray);
 }
