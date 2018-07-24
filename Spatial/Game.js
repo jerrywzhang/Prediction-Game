@@ -137,7 +137,7 @@ Ball.prototype.render = function() {
 
 var player = new Player();
 var ball = new Ball("#0000FF", 0, 0);
-var ball2 = new Ball("#FF0000", 1, 100);
+var ball2 = new Ball("#FF0000", 1, NUMBER_OF_TRIALS);
 
 var arrayCounter = 0;
 var hitCounter = 0;
@@ -259,9 +259,9 @@ function updateBall(ball) {
         } else if (ball.counter == NUMBER_OF_TRIALS - 1) {
           doneWithGame_Ball0 = true;
         }
-        if (ball.id == 1 && ball.counter < 100 + NUMBER_OF_TRIALS - 1) {
+        if (ball.id == 1 && ball.counter < NUMBER_OF_TRIALS + NUMBER_OF_TRIALS - 1) {
           ball.counter++;
-        } else if (ball.counter == 100 + NUMBER_OF_TRIALS - 1) {
+        } else if (ball.counter == NUMBER_OF_TRIALS + NUMBER_OF_TRIALS - 1) {
           doneWithGame_Ball1 = true;
         }
         displayRectangle = false;
@@ -296,9 +296,9 @@ function finishedAlert(ball) {
     window.location.href = '../next.html';
   }
   if (ball.id == 1) {
-    ball.counter = 200;
+    ball.counter = 2*NUMBER_OF_TRIALS;
   } else {
-    ball.counter = 100;
+    ball.counter = NUMBER_OF_TRIALS;
   }
   ball.x = WINDOW_WIDTH/2;
   ball.y = WINDOW_HEIGHT/2;
