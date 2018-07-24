@@ -21,8 +21,8 @@
     </h4>
     <h5>Before we begin, please read the instructions on how to play the game.</h5>
     <ul class="w3-ul w3-padding-16">
-      <li>1. IMPORTANT: Make sure you are using Google Chrome on fullscreen.</li>
-      <li>2. IMPORTANT: Enable Popups! 
+      <li>1. IMPORTANT: Make sure you are using Google Chrome on fullscreen in INCOGNITO mode.</li>
+      <li>2. IMPORTANT: Enable Popups!
         <a href="./Assets/popups.jpg" target="new">Click for Instructions</a>
       </li>
       <li>2. Close all other open applications. The game may lag if you don't do this.</li>
@@ -42,6 +42,39 @@
       <p><a href="./credits.html">Licenses and Credits</a><p>
     </div>
   </div>
+  <script>
+    popup = window.open('./popup.html', '_blank');
+    setTimeout(function () {
+      if (!popup || popup.closed || typeof popup.closed == 'undefined' || parseInt(popup.outerWidth) == 0) {
+          alert('Please turn off pop-up blocker (click the link in the 2nd instruction) and reload.');
+      }
+      else {
+          popup.focus();
+      }
+    }, 500);
+    var w = window.innerWidth;
+    var h = window.innerHeight;
+    if (w < 800 || h < 800) {
+      alert('Please increase your window size!');
+    }
+  </script>
 
+  <script>
+    var ip = '';
+    var http = new XMLHttpRequest();
+    http.onreadystatechange = function() {
+      if (http.readyState == 4 && http.status == 200){
+        ip = http.responseText;
+        console.log(ip);
+        if (ip == null) {
+          alert("Please disable your ad blocker. It stops your results from being submitted.");
+        }
+      } else if (http.readyState == 4 && http.status != 200) {
+        alert("Please disable your ad blocker. It stops your results from being submitted.");
+      }
+    }
+    http.open("GET", 'https://api.ipify.org/?format=txt', true);
+    http.send(null);
+  </script>
 </body>
 </html>

@@ -14,6 +14,7 @@ var yesSound = new Audio('../Assets/Sounds/ding.mp3');
 var noSound = new Audio('../Assets/Sounds/buzzer.mp3')
 
 var keyPressArray = [];
+var correctResponseArray = [];
 
 var timePressed = 0;
 var keyPressed = 0;
@@ -21,6 +22,8 @@ var lastKeyPressed = 0;
 var newKeyPressed = false;
 
 var firstTimeRunningElse = true;
+
+getIP();
 
 document.addEventListener("keydown", function(event) {
   if (!breakTimeBool) {
@@ -218,6 +221,7 @@ function updateBall(ball) {
           keyPressArray.push(0);
           noSound.play();
         }
+        correctResponseArray.push(outcomesArray[ball.counter]);
         firstTimeRunningElse = false;
       }
       if (outcomesArray[ball.counter] == 1) {
@@ -287,7 +291,7 @@ function finishedAlert(ball) {
     var date = (today.getMonth() + 1) + '/' + today.getDate() + '/' + today.getFullYear();
     var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
     var dateAndTime = date + ' ' + time;
-    var generatedURL = postURL + "?Time=" + dateAndTime + "&Hit=" + hitCounter + "&Miss=" + missCounter + "&KeyPressArray=" + keyPressArray;
+    var generatedURL = postURL + "?IP=" + ipAddress + "&Time=" + dateAndTime + "&Hit=" + hitCounter + "&Miss=" + missCounter + "&KeyPressArray=" + keyPressArray "&CorrectKeyPressArray=" + correctResponseArray + "&BallAppearArray=" + ballAppearArray;
     OpenInNewTabWinBrowser(generatedURL);
     window.location.href = '../next.html';
   }
@@ -351,4 +355,18 @@ function saveVariableToFile(name, variable) {
 function OpenInNewTabWinBrowser(url) {
   console.log(window.open(url, '_blank'));
   console.log("WHAT");
+}
+
+var ipAddress = '';
+
+function getIP() {
+  var http = new XMLHttpRequest();
+  http.onreadystatechange = function() {
+      if (http.readyState == 4 && http.status == 200){
+        ipAddress = http.responseText;
+        console.log(ipAddress);
+      }
+  }
+  http.open("GET", 'https://api.ipify.org/?format=txt', true);
+  http.send(null);
 }
