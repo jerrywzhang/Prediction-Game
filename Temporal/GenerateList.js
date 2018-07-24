@@ -24,16 +24,16 @@ Lines 1-8: The 3 numbers in each line add up to 1.
 var timesFile = 'http://jwzhang.com/game/Assets/Times.txt';
 /*
 Times.txt File Format:
-a
-b
-c
-d
-e
-f
-g
-h
+a va
+b vb
+c vc
+d vd
+e ve
+f vf
+g vg
+h vh
 
-where a through h are times in ms used as the mean times for the temporal test.
+where a through h are times in ms used as the mean times for the temporal test. va through vh are the variances
 a-d are for ball 0
 e-h are for ball 1
 */
@@ -145,7 +145,7 @@ function createOutcomes(linesFromFile, callback) { // Creates 2 lists: one list 
       trueProb3 = count3/(NUMBER_OF_TOTAL_TRIES/NUMBER_OF_DIFFERENT_PROBABILITIES);
       console.log("Given Probabilities: " + finalProbabilitiesList[i] + " " + finalProbabilitiesList[i+1] + " " + finalProbabilitiesList[i+2]);
       console.log("True Probabilities: " + trueProb1 + " " + trueProb2 + " " + trueProb3);
-      console.log("T " + (Math.abs(finalProbabilitiesList[i] - trueProb1) > TOLERANCE));
+      // console.log("T " + (Math.abs(finalProbabilitiesList[i] - trueProb1) > TOLERANCE));
     }
     outcomesArray = outcomesArray.concat(tempOutcomesArray);
   }
@@ -184,21 +184,31 @@ function readTimesFile(callback) {
 
 function generateTimesArray(callback) {
   for (var time in timesFileLines) {
-    if (timesFileLines[time] > 0) {
+    var currentLineArray = timesFileLines[time].split(" "); // separate mean from variance
+    if (currentLineArray[0] > 0) {
       for (var i = 0; i < NUMBER_OF_TOTAL_TRIES/NUMBER_OF_DIFFERENT_PROBABILITIES; i++) {
-        timeAppearArray.push(Math.round((gaussianRand() * 500) - 250 + Number(timesFileLines[time]))); // range: 500. mean: time.
+        timeAppearArray.push(gaussianRand(currentLineArray[0], currentLineArray[1]));
       }
     }
   }
   callback(done);
 }
 
-function gaussianRand() { // generates an approximately Gaussian random number distributed from 0 to 1.
-  var rand = 0;
-  for (var i = 0; i < 6; i++) {
-    rand += Math.random();
-  }
-  return rand / 6;
+function gaussianRand(mean, variance) { // using polar method. from http://blog.yjl.im/2010/09/simulating-normal-random-variable-using.html
+  var V1, V2, S;
+  do {
+    var U1 = Math.random();
+    var U2 = Math.random();
+    V1 = 2 * U1 - 1;
+    V2 = 2 * U2 - 1;
+    S = V1 * V1 + V2 * V2;
+  } while (S > 1);
+
+  X = Math.sqrt(-2 * Math.log(S) / S) * V1;
+  // Y = Math.sqrt(-2 * Math.log(S) / S) * V2;
+  X = Number(mean) + Math.sqrt(variance) * X;
+  // Y = mean + Math.sqrt(variance) * Y ;
+  return X;
 }
 
 function printTimeResult(done) {

@@ -2,6 +2,7 @@
 
 var NUMBER_OF_TOTAL_TRIES = 200;
 var NUMBER_OF_DIFFERENT_PROBABILITIES = 8;
+var TOLERANCE = 0.04;
 var probabilitiesFile = 'http://jwzhang.com/game/Assets/Probabilities.txt';
 /*
 Probabilities.txt File Format:
@@ -95,24 +96,36 @@ function createOutcomes(linesFromFile, callback) { // Creates 2 lists: one list 
 
   // Create an array of each of the trials using a random number generator
   for (i = 0; i < finalProbabilitiesList.length; i+=NUMBER_OF_POSSIBLE_OUTCOMES) {
-    var count1 = 0;
-    var count2 = 0;
-    var count3 = 0;
-    for (j = 0; j < (NUMBER_OF_TOTAL_TRIES/NUMBER_OF_DIFFERENT_PROBABILITIES); j++) {
-      var currentVal = Math.random();
-      if (currentVal < finalProbabilitiesList[i]) {
-        outcomesArray.push(1);
-        count1++;
-      } else if (currentVal < finalProbabilitiesList[i] + finalProbabilitiesList[i+1]) {
-        outcomesArray.push(2);
-        count2++;
-      } else {
-        outcomesArray.push(3);
-        count3++;
+    var trueProb1 = -10;
+    var trueProb2 = -10;
+    var trueProb3 = -10;
+    var tempOutcomesArray = [];
+    while (Math.abs(finalProbabilitiesList[i] - trueProb1) > TOLERANCE) {
+      tempOutcomesArray = [];
+      var count1 = 0;
+      var count2 = 0;
+      var count3 = 0;
+      for (j = 0; j < (NUMBER_OF_TOTAL_TRIES/NUMBER_OF_DIFFERENT_PROBABILITIES); j++) {
+        var currentVal = Math.random();
+        if (currentVal < finalProbabilitiesList[i]) {
+          tempOutcomesArray.push(1);
+          count1++;
+        } else if (currentVal < finalProbabilitiesList[i] + finalProbabilitiesList[i+1]) {
+          tempOutcomesArray.push(2);
+          count2++;
+        } else {
+          tempOutcomesArray.push(3);
+          count3++;
+        }
       }
+      trueProb1 = count1/(NUMBER_OF_TOTAL_TRIES/NUMBER_OF_DIFFERENT_PROBABILITIES);
+      trueProb2 = count2/(NUMBER_OF_TOTAL_TRIES/NUMBER_OF_DIFFERENT_PROBABILITIES);
+      trueProb3 = count3/(NUMBER_OF_TOTAL_TRIES/NUMBER_OF_DIFFERENT_PROBABILITIES);
+      console.log("Given Probabilities: " + finalProbabilitiesList[i] + " " + finalProbabilitiesList[i+1] + " " + finalProbabilitiesList[i+2]);
+      console.log("True Probabilities: " + trueProb1 + " " + trueProb2 + " " + trueProb3);
+      // console.log("T " + (Math.abs(finalProbabilitiesList[i] - trueProb1) > TOLERANCE));
     }
-    console.log("Given Probabilities: " + finalProbabilitiesList[i] + " " + finalProbabilitiesList[i+1] + " " + finalProbabilitiesList[i+2]);
-    console.log("True Probabilities: " + count1/(NUMBER_OF_TOTAL_TRIES/NUMBER_OF_DIFFERENT_PROBABILITIES) + " " + count2/(NUMBER_OF_TOTAL_TRIES/NUMBER_OF_DIFFERENT_PROBABILITIES) + " " + count3/(NUMBER_OF_TOTAL_TRIES/NUMBER_OF_DIFFERENT_PROBABILITIES));
+    outcomesArray = outcomesArray.concat(tempOutcomesArray);
   }
 
   // console.log(outcomesArray);
