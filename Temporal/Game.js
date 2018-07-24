@@ -2,7 +2,7 @@
 
 // Variables
 var NUMBER_OF_TRIALS = 100; // this is per ball. Make sure it's 200 or less.
-var BREAK_TIME = 2000; // in ms
+var BREAK_TIME = 1000; // in ms
 var ALLOWABLE_TIME_DIFFERENCE = 400; // in ms
 
 // Code starts here
@@ -294,7 +294,7 @@ function finishedAlert(ball) {
     var date = (today.getMonth() + 1) + '/' + today.getDate() + '/' + today.getFullYear();
     var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
     var dateAndTime = date + ' ' + time;
-    var generatedURL = postURL + "?IP=" + ipAddress + "&Time=" + dateAndTime + "&Hit=" + hitCounter + "&Miss=" + missCounter + "&KeyPressArray=" + keyPressArray "&CorrectKeyPressArray=" + correctResponseArray + "&BallAppearArray=" + ballAppearArray + "&TimePressArray=" + timePressedArray + "&CorrectTimeAppearArray=" + correctTimeAppearArray;
+    var generatedURL = postURL + "?IP=" + ipAddress + "&Time=" + dateAndTime + "&SorT=" + "Temporal" + "&Hit=" + hitCounter + "&Miss=" + missCounter + "&KeyPressArray=" + keyPressArray "&CorrectKeyPressArray=" + correctResponseArray + "&BallAppearArray=" + ballAppearArray + "&TimePressArray=" + timePressedArray + "&CorrectTimeAppearArray=" + correctTimeAppearArray;
     OpenInNewTabWinBrowser(generatedURL);
     window.location.href = '../finished.html';
   }
