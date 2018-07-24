@@ -12,7 +12,7 @@ Second array: 0 or 1 for which ball
 */
 
 // IF YOU CHANGE THESE TWO VARIABLES, MAKE SURE YOU CHANGE THEM IN GenerateList.js AS WELL
-var NUMBER_OF_TOTAL_TRIES = 400;
+var NUMBER_OF_TOTAL_TRIES = 200;
 var NUMBER_OF_DIFFERENT_PROBABILITIES = 8;
 
 readArraysFile(createOutcomes);

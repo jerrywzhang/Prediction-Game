@@ -12,7 +12,7 @@ Second array: 0 or 1 for which ball
 */
 
 // IF YOU CHANGE THESE TWO VARIABLES, MAKE SURE YOU CHANGE THEM IN GenerateList.js AS WELL
-var NUMBER_OF_TOTAL_TRIES = 400;
+var NUMBER_OF_TOTAL_TRIES = 200;
 var NUMBER_OF_DIFFERENT_PROBABILITIES = 8;
 
 readFile(createOutcomes);
@@ -50,8 +50,8 @@ function createOutcomes(callback) { // Converts strings to numbers
 function pushToArray(num, array) {
   var currentLine = lines[num]; // first array
   var splitNums = currentLine.split(",");
-  if (splitNums.length != NUMBER_OF_TOTAL_TRIES) { // Make sure there are 400 items per line
-    console.log("ERROR:  Incorrect number of items");
+  if (splitNums.length != NUMBER_OF_TOTAL_TRIES) { // Make sure there are 200 items per line
+    console.log("ERROR:  Incorrect number of items " + splitNums.length);
     alert("ERROR: Incorrect number of items!. Check the Arrays.txt file!");
   } else {
     for (var num in splitNums) {

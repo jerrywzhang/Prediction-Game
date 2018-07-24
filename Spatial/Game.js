@@ -1,7 +1,7 @@
 // Author: Jerry Zhang
 
 // Variables
-var NUMBER_OF_TRIALS = 100; // this is per ball. Make sure it's 200 or less.
+var NUMBER_OF_TRIALS = 100; // this is per ball. Make sure it's 100 or less.
 var TIME_TO_WAIT = 1500; // in ms
 var BREAK_TIME = 600; // in ms
 
@@ -137,7 +137,7 @@ Ball.prototype.render = function() {
 
 var player = new Player();
 var ball = new Ball("#0000FF", 0, 0);
-var ball2 = new Ball("#FF0000", 1, 200);
+var ball2 = new Ball("#FF0000", 1, 100);
 
 var arrayCounter = 0;
 var hitCounter = 0;
@@ -259,9 +259,9 @@ function updateBall(ball) {
         } else if (ball.counter == NUMBER_OF_TRIALS - 1) {
           doneWithGame_Ball0 = true;
         }
-        if (ball.id == 1 && ball.counter < 200 + NUMBER_OF_TRIALS - 1) {
+        if (ball.id == 1 && ball.counter < 100 + NUMBER_OF_TRIALS - 1) {
           ball.counter++;
-        } else if (ball.counter == 200 + NUMBER_OF_TRIALS - 1) {
+        } else if (ball.counter == 100 + NUMBER_OF_TRIALS - 1) {
           doneWithGame_Ball1 = true;
         }
         displayRectangle = false;
@@ -291,14 +291,14 @@ function finishedAlert(ball) {
     var date = (today.getMonth() + 1) + '/' + today.getDate() + '/' + today.getFullYear();
     var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
     var dateAndTime = date + ' ' + time;
-    var generatedURL = postURL + "?IP=" + ipAddress + "&Time=" + dateAndTime + "&SorT=" + "Spatial" + "&Hit=" + hitCounter + "&Miss=" + missCounter + "&KeyPressArray=" + keyPressArray "&CorrectKeyPressArray=" + correctResponseArray + "&BallAppearArray=" + ballAppearArray;
+    var generatedURL = postURL + "?IP=" + ipAddress + "&Time=" + dateAndTime + "&SorT=Spatial&Hit=" + hitCounter + "&Miss=" + missCounter + "&KeyPressArray=" + keyPressArray + "&CorrectKeyPressArray=" + correctResponseArray + "&BallAppearArray=" + ballAppearArray;
     OpenInNewTabWinBrowser(generatedURL);
     window.location.href = '../next.html';
   }
   if (ball.id == 1) {
-    ball.counter = 400;
-  } else {
     ball.counter = 200;
+  } else {
+    ball.counter = 100;
   }
   ball.x = WINDOW_WIDTH/2;
   ball.y = WINDOW_HEIGHT/2;
