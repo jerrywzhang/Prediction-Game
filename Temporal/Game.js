@@ -189,7 +189,7 @@ function updateBall(ball) {
       if (keyPressed == 1 && !doneOnce && (timePressed + ALLOWABLE_TIME_DIFFERENCE > startTime + timeAppearArray[ball.counter] + BREAK_TIME)) {
         displayRectangle = true;
         keyPressArray.push(keyPressed);
-        timePressedArray.push(timePressed - startTime - BREAK_TIME);
+        timePressedArray.push(Math.round(timePressed - startTime - BREAK_TIME));
         hitCounter++;
         console.log("HIT " + Number(startTime + timeAppearArray[ball.counter] + BREAK_TIME - timePressed));
         doneOnce = true;
@@ -224,7 +224,7 @@ function updateBall(ball) {
           noSound.play();
         }
         correctResponseArray.push(outcomesArray[ball.counter]);
-        correctTimeAppearArray.push(timeAppearArray[ball.counter]);
+        correctTimeAppearArray.push(Math.round(timeAppearArray[ball.counter]));
         firstTimeRunningElse = false;
       }
       // if (outcomesArray[ball.counter] == 1) {
