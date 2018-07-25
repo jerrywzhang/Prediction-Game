@@ -218,7 +218,7 @@ function updateBall(ball) {
         } else {
           // document.getElementById("hit").innerHTML = "Result: NO INPUT";
           console.log("NO INPUT");
-          keyPressArray.push(x);
+          keyPressArray.push('x');
           noSound.play();
         }
         correctResponseArray.push(outcomesArray[ball.counter]);
