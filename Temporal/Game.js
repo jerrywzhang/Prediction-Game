@@ -199,7 +199,7 @@ function updateBall(ball) {
         // console.log(timePressed + ALLOWABLE_TIME_DIFFERENCE);
         displayRectangle = true;
         keyPressArray.push(keyPressed);
-        timePressedArray.push(timePressed - startTime - BREAK_TIME);
+        timePressedArray.push(Math.round(timePressed - startTime - BREAK_TIME));
         console.log("MISS");
         missCounter++;
         doneOnce = true;
