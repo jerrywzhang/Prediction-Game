@@ -284,11 +284,11 @@ var postURL = 'https://script.google.com/macros/s/AKfycbx2ptyDxNWvgSBPrIaSx5PYlq
 
 function finishedAlert(ball) {
   if (!ranAlertAlready) {
-    alert("You've finished the game! " + hitCounter);
+    // alert("You've finished the game! " + hitCounter);
     console.log("HIT: " + hitCounter + " MISS: " + missCounter + " %: " + 100*(hitCounter/(NUMBER_OF_TRIALS*2)));
     console.log(hitCounter + missCounter);
     console.log(keyPressArray);
-    saveVariableToFile("outcome", hitCounter + " " + missCounter + " " + keyPressArray);
+    // saveVariableToFile("outcome", hitCounter + " " + missCounter + " " + keyPressArray);
     ranAlertAlready = true;
     var today = new Date();
     var date = (today.getMonth() + 1) + '/' + today.getDate() + '/' + today.getFullYear();
