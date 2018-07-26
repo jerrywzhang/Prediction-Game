@@ -40,13 +40,13 @@ document.addEventListener("keydown", function(event) {
         keyPressed = 1;
         newKeyPressed = true;
         displayRectangle = true;
-      } else if (key == 50 || key == 98 || key == 37) {
+      } else if (key == 50 || key == 98 || key == 39) {
         timePressed = performance.now();
         console.log("2 Pressed");
         keyPressed = 2;
         newKeyPressed = true;
         displayRectangle = true;
-      } else if (key == 51 || key == 99 || key == 39) {
+      } else if (key == 51 || key == 99 || key == 37) {
         timePressed = performance.now();
         console.log("3 Pressed");
         keyPressed = 3;
@@ -185,7 +185,7 @@ function updateBall(ball) {
       ball.x_speed = 0;
       ball.y_speed = 0;
       ball.x = WINDOW_WIDTH/2;
-      ball.y = WINDOW_HEIGHT/2;
+      ball.y = WINDOW_HEIGHT/2 + 175/4;
       if (keyPressed == 1 && !doneOnce && (timePressed + ALLOWABLE_TIME_DIFFERENCE > startTime + timeAppearArray[ball.counter] + BREAK_TIME)) {
         displayRectangle = true;
         keyPressArray.push(keyPressed);
@@ -229,7 +229,7 @@ function updateBall(ball) {
       }
       // if (outcomesArray[ball.counter] == 1) {
       ball.x_speed = 0;
-      ball.y_speed = 50;
+      ball.y_speed = -50;
       // } else if (outcomesArray[ball.counter] == 2) {
       //   ball.x_speed = -13;
       //   ball.y_speed = -7;
@@ -248,7 +248,7 @@ function updateBall(ball) {
       // }
       ball.x += ball.x_speed;
       ball.y += ball.y_speed;
-      if (ball.y > WINDOW_HEIGHT - 20 || ball.x < 100 || ball.x > 600) {
+      if (ball.y < 50 || ball.x < 100 || ball.x > 600) {
         ball.x = WINDOW_WIDTH/2;
         ball.y = -25;
         keyPressed = 0;
@@ -325,12 +325,13 @@ Player.prototype.update = function() {
     this.basket.move(888, 888, 0); // off the screen
     keyPressed = 0;
   } else if (keyPressed == 1) {
-    this.basket.move(WINDOW_WIDTH/2 - 25, WINDOW_HEIGHT-100, 0);
+    this.basket.move(WINDOW_WIDTH/2 - 25, 175/4 + 50, 0);
   } else if (keyPressed == 2) { // rotation matrix calculator used: http://www.wolframalpha.com/widgets/view.jsp?id=bd71841fce4a834c804930bd48e7b6cf
-    this.basket.move(9.81-25, 237-50, -30); // calculated from rotation matrix for 30 degrees counterclockwise. xy coordinate in normal plane: (300-(100)*sqrt(3), 200)
-                                            // then translated 25 left (+25), 50 up (-50).
+    this.basket.move(-147.696-25, 631.683, -60);  // calculated from rotation matrix for 60 degrees counterclockwise. xy coordinate in normal plane: (300+173.205081, 343.75+100)
+                                                  // then translated 25 left in rotation plane
   } else if (keyPressed == 3) {
-    this.basket.move(510-25, -63.4-50, 30); // calculated from rotation matrix for 30 degrees clockwise. xy coordinate in normal plane: (300+(100-12.5)*sqrt(3), 200-12.5)
+    this.basket.move(447.696-25, 112.067, 60);  // calculated from rotation matrix for 60 degrees clockwise. xy coordinate in normal plane: (300-173.205081, 343.75+100)
+                                                // then translated 25 left in rotation plane.
   }
 };
 
