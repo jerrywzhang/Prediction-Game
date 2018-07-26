@@ -202,7 +202,7 @@ function generateTimesArray(callback) {
       for (var i = 0; i < NUMBER_OF_TOTAL_TRIES/NUMBER_OF_DIFFERENT_PROBABILITIES; i++) {
         var gaussianRand = gaussian(Number(currentLineArray[0]), Number(currentLineArray[1]));
         var numberGenerated = 0;
-        while (numberGenerated < Number(currentLineArray[0]) - 3*Number(currentLineArray[1]) || numberGenerated > Number(currentLineArray[0]) + 3*Number(currentLineArray[1])) {
+        while (numberGenerated == 0 || numberGenerated < Number(currentLineArray[0]) - 3*Number(currentLineArray[1]) || numberGenerated > Number(currentLineArray[0]) + 3*Number(currentLineArray[1])) {
           console.log("NOT GOOD YET " + numberGenerated);
           numberGenerated = gaussianRand();
         }
@@ -254,9 +254,9 @@ function printTimeResult(done) {
 var check = function() {
   if (timeReady === true && ballReady === true) {
     var hiddenElement = document.createElement('a');
-    // hiddenElement.href = 'data:attachment/text,' + encodeURI(outcomesArray) + "N" + encodeURI(ballAppearArray) + "N" + encodeURI(timeAppearArray) + "N" + encodeURI(blackBoxTimeArray);
+    hiddenElement.href = 'data:attachment/text,' + encodeURI(outcomesArray) + "N" + encodeURI(ballAppearArray) + "N" + encodeURI(timeAppearArray) + "N" + encodeURI(blackBoxTimeArray);
     // TODO: Uncomment above
-    hiddenElement.href = 'data:attachment/text,' + encodeURI(timeAppearArray);
+    // hiddenElement.href = 'data:attachment/text,' + encodeURI(timeAppearArray);
     hiddenElement.target = '_blank';
     hiddenElement.download = 'Arrays.txt';
     hiddenElement.click();
