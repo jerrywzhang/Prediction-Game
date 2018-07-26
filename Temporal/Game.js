@@ -203,7 +203,7 @@ function updateBall(ball) {
         displayRectangle = true;
         keyPressArray.push(keyPressed);
         timePressedArray.push(Math.round(timePressed - startTime - BREAK_TIME));
-        console.log("MISS");
+        console.log("MISS " + Number(startTime + timeAppearArray[ball.counter] + BREAK_TIME - timePressed));
         missCounter++;
         doneOnce = true;
         hitThisTime = false;
