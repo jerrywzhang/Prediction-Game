@@ -200,7 +200,14 @@ function generateTimesArray(callback) {
     var currentLineArray = timesFileLines[time].split(" "); // separate mean from variance
     if (currentLineArray[0] > 0) {
       for (var i = 0; i < NUMBER_OF_TOTAL_TRIES/NUMBER_OF_DIFFERENT_PROBABILITIES; i++) {
-        timeAppearArray.push(gaussianRand(currentLineArray[0], currentLineArray[1]));
+        var gaussianRand = gaussian(Number(currentLineArray[0]), Number(currentLineArray[1]));
+        var numberGenerated = 0;
+        while (numberGenerated < Number(currentLineArray[0]) - 3*Number(currentLineArray[1]) || numberGenerated > Number(currentLineArray[0]) + 3*Number(currentLineArray[1])) {
+          console.log("NOT GOOD YET " + numberGenerated);
+          numberGenerated = gaussianRand();
+        }
+        console.log("DONE " + numberGenerated);
+        timeAppearArray.push(numberGenerated);
         blackBoxTimeArray.push(currentLineArray[2]);
       }
     }
@@ -208,21 +215,35 @@ function generateTimesArray(callback) {
   callback(done);
 }
 
-function gaussianRand(mean, variance) { // using polar method. from http://blog.yjl.im/2010/09/simulating-normal-random-variable-using.html
-  var V1, V2, S;
-  do {
-    var U1 = Math.random();
-    var U2 = Math.random();
-    V1 = 2 * U1 - 1;
-    V2 = 2 * U2 - 1;
-    S = V1 * V1 + V2 * V2;
-  } while (S > 1);
+function gaussian(mean, stdev) {
+  var y2;
+  var use_last = false;
+  return function() {
+    var y1;
+    if(use_last) {
+       y1 = y2;
+       use_last = false;
+    }
+    else {
+      var x1, x2, w;
+      do {
+        x1 = 2.0 * Math.random() - 1.0;
+        x2 = 2.0 * Math.random() - 1.0;
+        w  = x1 * x1 + x2 * x2;
+      } while (w >= 1.0){
+        w = Math.sqrt((-2.0 * Math.log(w))/w);
+        y1 = x1 * w;
+        y2 = x2 * w;
+        use_last = true;
+      }
+    }
 
-  X = Math.sqrt(-2 * Math.log(S) / S) * V1;
-  // Y = Math.sqrt(-2 * Math.log(S) / S) * V2;
-  X = Number(mean) + Math.sqrt(variance) * X;
-  // Y = mean + Math.sqrt(variance) * Y ;
-  return X;
+    var retval = mean + stdev * y1;
+    if(retval > 0) {
+       return retval;
+     }
+     return -retval;
+ }
 }
 
 function printTimeResult(done) {
@@ -233,7 +254,9 @@ function printTimeResult(done) {
 var check = function() {
   if (timeReady === true && ballReady === true) {
     var hiddenElement = document.createElement('a');
-    hiddenElement.href = 'data:attachment/text,' + encodeURI(outcomesArray) + "N" + encodeURI(ballAppearArray) + "N" + encodeURI(timeAppearArray) + "N" + encodeURI(blackBoxTimeArray);
+    // hiddenElement.href = 'data:attachment/text,' + encodeURI(outcomesArray) + "N" + encodeURI(ballAppearArray) + "N" + encodeURI(timeAppearArray) + "N" + encodeURI(blackBoxTimeArray);
+    // TODO: Uncomment above
+    hiddenElement.href = 'data:attachment/text,' + encodeURI(timeAppearArray);
     hiddenElement.target = '_blank';
     hiddenElement.download = 'Arrays.txt';
     hiddenElement.click();
