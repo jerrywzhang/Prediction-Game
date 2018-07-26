@@ -79,7 +79,7 @@ canvas.width = width;
 canvas.height = height;
 var context = canvas.getContext('2d');
 var image = new Image();
-image.src = "../Assets/Background/background.jpg";
+image.src = "../Assets/background.jpg";
 
 window.onload = function() {
   document.body.appendChild(canvas);
@@ -354,7 +354,7 @@ function saveVariableToFile(name, variable) {
 
 function OpenInNewTabWinBrowser(url) {
   console.log(window.open(url, '_blank'));
-  console.log("WHAT");
+  console.log("Opening " + url + " in new window.");
 }
 
 var ipAddress = '';
