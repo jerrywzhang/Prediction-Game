@@ -21,6 +21,7 @@ readArraysFile(createOutcomes);
 var outcomesArray = [];
 var ballAppearArray = [];
 var timeAppearArray = [];
+var blackBoxTimeAppearArray = [];
 var done = false;
 var lines = [];
 
@@ -44,6 +45,7 @@ function createOutcomes(callback) { // Converts strings to numbers
   pushToArray(0, outcomesArray);
   pushToArray(1, ballAppearArray);
   pushToArray(2, timeAppearArray);
+  pushToArray(3, blackBoxTimeAppearArray);
 
   done = true;
   callback(done);
@@ -77,4 +79,5 @@ function getResult(done) { // called as the callback of createOutcomes
   console.log("Outcomes: " + outcomesArray);
   console.log("Which Ball: " + ballAppearArray);
   console.log("Times: " + timeAppearArray);
+  console.log("Black Box Times: " + blackBoxTimeAppearArray);
 }

@@ -3,7 +3,7 @@
 // Variables
 var NUMBER_OF_TRIALS = 100; // this is per ball. Make sure it's 200 or less.
 var BREAK_TIME = 1000; // in ms
-var ALLOWABLE_TIME_DIFFERENCE = 400; // in ms
+// var ALLOWABLE_TIME_DIFFERENCE = 400; // in ms
 
 // Code starts here
 var WINDOW_WIDTH = 600;
@@ -17,6 +17,8 @@ var keyPressArray = [];
 var correctResponseArray = [];
 var correctTimeAppearArray = [];
 var timePressedArray = [];
+var blackBoxTimeArrayOrdered = [];
+var currentAllowedTimeDiff = 0;
 
 var timePressed = 0;
 var keyPressed = 0;
@@ -179,6 +181,7 @@ function updateBall(ball) {
     run = true;
   }
   if (run) {
+    currentAllowedTimeDiff = blackBoxTimeAppearArray[ball.counter];
     if (performance.now() - startTime < timeAppearArray[ball.counter] + BREAK_TIME) { // wait before moving the ball and going to break time
       document.getElementById("go").innerHTML = "Status: Press 1, 2, or 3!";
       // console.log(startTime);
@@ -186,7 +189,7 @@ function updateBall(ball) {
       ball.y_speed = 0;
       ball.x = WINDOW_WIDTH/2;
       ball.y = WINDOW_HEIGHT/2 + 175/4;
-      if (keyPressed == 1 && !doneOnce && (timePressed + ALLOWABLE_TIME_DIFFERENCE > startTime + timeAppearArray[ball.counter] + BREAK_TIME)) {
+      if (keyPressed == 1 && !doneOnce && (timePressed + currentAllowedTimeDiff > startTime + timeAppearArray[ball.counter] + BREAK_TIME)) {
         displayRectangle = true;
         keyPressArray.push(keyPressed);
         timePressedArray.push(Math.round(timePressed - startTime - BREAK_TIME));
@@ -195,7 +198,7 @@ function updateBall(ball) {
         doneOnce = true;
         hitThisTime = true;
         keyPressed = 0;
-      } else if (keyPressed != 0 && timePressed + ALLOWABLE_TIME_DIFFERENCE < startTime + timeAppearArray[ball.counter] + BREAK_TIME && !doneOnce) {
+      } else if (keyPressed != 0 && timePressed + currentAllowedTimeDiff < startTime + timeAppearArray[ball.counter] + BREAK_TIME && !doneOnce) {
         // console.log(timePressed + ALLOWABLE_TIME_DIFFERENCE);
         displayRectangle = true;
         keyPressArray.push(keyPressed);
@@ -225,6 +228,7 @@ function updateBall(ball) {
         }
         correctResponseArray.push(outcomesArray[ball.counter]);
         correctTimeAppearArray.push(Math.round(timeAppearArray[ball.counter]));
+        blackBoxTimeArrayOrdered.push(currentAllowedTimeDiff);
         firstTimeRunningElse = false;
       }
       // if (outcomesArray[ball.counter] == 1) {
@@ -294,7 +298,7 @@ function finishedAlert(ball) {
     var date = (today.getMonth() + 1) + '/' + today.getDate() + '/' + today.getFullYear();
     var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
     var dateAndTime = date + ' ' + time;
-    var generatedURL = postURL + "?IP=" + ipAddress + "&Time=" + dateAndTime + "&SorT=" + "Temporal" + "&Hit=" + hitCounter + "&Miss=" + missCounter + "&KeyPressArray=" + keyPressArray + "&CorrectKeyPressArray=" + correctResponseArray + "&BallAppearArray=" + ballAppearArray + "&TimePressArray=" + timePressedArray + "&CorrectTimeAppearArray=" + correctTimeAppearArray;
+    var generatedURL = postURL + "?IP=" + ipAddress + "&Time=" + dateAndTime + "&SorT=" + "Temporal" + "&Hit=" + hitCounter + "&Miss=" + missCounter + "&KeyPressArray=" + keyPressArray + "&CorrectKeyPressArray=" + correctResponseArray + "&BallAppearArray=" + ballAppearArray + "&TimePressArray=" + timePressedArray + "&CorrectTimeAppearArray=" + correctTimeAppearArray + "&AllowedTimeDifferences=" + blackBoxTimeArrayOrdered;
     OpenInNewTabWinBrowser(generatedURL);
     window.location.href = '../finished.html';
   }
@@ -321,7 +325,8 @@ Ball.prototype.update = function(basket) {
 Player.prototype.update = function() {
   var timeDifference = performance.now() - timePressed;
   // console.log(displayRectangle);
-  if (!displayRectangle || timeDifference > ALLOWABLE_TIME_DIFFERENCE) {
+  // if (!displayRectangle || timeDifference > ALLOWABLE_TIME_DIFFERENCE) {
+  if (!displayRectangle || timeDifference > currentAllowedTimeDiff) {
     this.basket.move(888, 888, 0); // off the screen
     keyPressed = 0;
   } else if (keyPressed == 1) {

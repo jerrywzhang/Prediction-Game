@@ -50,6 +50,7 @@ var done = false;
 var timesFileLines = [];
 var timeReady = false;
 var ballReady = false;
+var blackBoxTimeArray = [];
 
 function readFile(callback) {
   var txtFile = new XMLHttpRequest();
@@ -200,6 +201,7 @@ function generateTimesArray(callback) {
     if (currentLineArray[0] > 0) {
       for (var i = 0; i < NUMBER_OF_TOTAL_TRIES/NUMBER_OF_DIFFERENT_PROBABILITIES; i++) {
         timeAppearArray.push(gaussianRand(currentLineArray[0], currentLineArray[1]));
+        blackBoxTimeArray.push(currentLineArray[2]);
       }
     }
   }
@@ -231,7 +233,7 @@ function printTimeResult(done) {
 var check = function() {
   if (timeReady === true && ballReady === true) {
     var hiddenElement = document.createElement('a');
-    hiddenElement.href = 'data:attachment/text,' + encodeURI(outcomesArray) + "N" + encodeURI(ballAppearArray) + "N" + encodeURI(timeAppearArray);
+    hiddenElement.href = 'data:attachment/text,' + encodeURI(outcomesArray) + "N" + encodeURI(ballAppearArray) + "N" + encodeURI(timeAppearArray) + "N" + encodeURI(blackBoxTimeArray);
     hiddenElement.target = '_blank';
     hiddenElement.download = 'Arrays.txt';
     hiddenElement.click();
