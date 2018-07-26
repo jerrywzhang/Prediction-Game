@@ -183,7 +183,7 @@ function updateBall(ball) {
   if (run) {
     currentAllowedTimeDiff = blackBoxTimeAppearArray[ball.counter];
     if (performance.now() - startTime < timeAppearArray[ball.counter] + BREAK_TIME) { // wait before moving the ball and going to break time
-      document.getElementById("go").innerHTML = "Status: Press 1, 2, or 3!";
+      document.getElementById("go").innerHTML = "Status: Press one of the arrow keys right before you think the ball will move!";
       // console.log(startTime);
       ball.x_speed = 0;
       ball.y_speed = 0;

@@ -15,6 +15,7 @@ var noSound = new Audio('../Assets/Sounds/buzzer.mp3')
 
 var keyPressArray = [];
 var correctResponseArray = [];
+var keyPressTimeArray = [];
 
 var timePressed = 0;
 var keyPressed = 0;
@@ -182,7 +183,7 @@ function updateBall(ball) {
   if (run) {
     timeRemaining = TIME_TO_WAIT + BREAK_TIME - performance.now() + startTime;
     if (performance.now() - startTime < TIME_TO_WAIT + BREAK_TIME) { // wait before moving the ball and going to break time
-      document.getElementById("go").innerHTML = "Status: Press 1, 2, or 3 in the next " + Math.round(timeRemaining/1000 + 0.5) + " seconds!";
+      document.getElementById("go").innerHTML = "Status: Press an arrow key in the next " + Math.round(timeRemaining/1000 + 0.5) + " seconds!";
       // console.log(startTime);
       ball.x_speed = 0;
       ball.y_speed = 0;
@@ -191,6 +192,7 @@ function updateBall(ball) {
       if (keyPressed == outcomesArray[ball.counter] && !doneOnce) {
         displayRectangle = true;
         keyPressArray.push(keyPressed);
+        keyPressTimeArray.push(Number(timePressed - startTime));
         hitCounter++;
         console.log("HIT");
         doneOnce = true;
@@ -199,6 +201,7 @@ function updateBall(ball) {
       } else if (keyPressed != 0 && !doneOnce) {
         displayRectangle = true;
         keyPressArray.push(keyPressed);
+        keyPressTimeArray.push(Number(timePressed - startTime));
         console.log("MISS");
         missCounter++;
         doneOnce = true;
@@ -219,6 +222,7 @@ function updateBall(ball) {
           // document.getElementById("hit").innerHTML = "Result: NO INPUT";
           console.log("NO INPUT");
           keyPressArray.push('x');
+          keyPressTimeArray.push('x');
           noSound.play();
         }
         correctResponseArray.push(outcomesArray[ball.counter]);
@@ -291,7 +295,7 @@ function finishedAlert(ball) {
     var date = (today.getMonth() + 1) + '/' + today.getDate() + '/' + today.getFullYear();
     var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
     var dateAndTime = date + ' ' + time;
-    var generatedURL = postURL + "?IP=" + ipAddress + "&Time=" + dateAndTime + "&SorT=Spatial&Hit=" + hitCounter + "&Miss=" + missCounter + "&KeyPressArray=" + keyPressArray + "&CorrectKeyPressArray=" + correctResponseArray + "&BallAppearArray=" + ballAppearArray;
+    var generatedURL = postURL + "?IP=" + ipAddress + "&Time=" + dateAndTime + "&SorT=Spatial&Hit=" + hitCounter + "&Miss=" + missCounter + "&KeyPressArray=" + keyPressArray + "&CorrectKeyPressArray=" + correctResponseArray + "&BallAppearArray=" + ballAppearArray + "&TimePressArray=" + keyPressTimeArray;
     OpenInNewTabWinBrowser(generatedURL);
     window.location.href = '../next.html';
   }
