@@ -182,28 +182,28 @@ function updateBall(ball) {
   }
   if (run) {
     currentAllowedTimeDiff = blackBoxTimeAppearArray[ball.counter];
-    if (performance.now() - startTime < timeAppearArray[ball.counter] + BREAK_TIME) { // wait before moving the ball and going to break time
+    if (performance.now() - startTime < timeAppearArray[ball.counter] + BREAK_TIME + 300) { // wait before moving the ball and going to break time
       document.getElementById("go").innerHTML = "Status: Press one of the arrow keys right before you think the ball will move!";
       // console.log(startTime);
       ball.x_speed = 0;
       ball.y_speed = 0;
       ball.x = WINDOW_WIDTH/2;
       ball.y = WINDOW_HEIGHT/2 + 175/4;
-      if (keyPressed == 1 && !doneOnce && (timePressed + currentAllowedTimeDiff > startTime + timeAppearArray[ball.counter] + BREAK_TIME)) {
+      if (keyPressed == 1 && !doneOnce && (timePressed + currentAllowedTimeDiff > startTime + timeAppearArray[ball.counter] + BREAK_TIME + 300)) {
         displayRectangle = true;
         keyPressArray.push(keyPressed);
         timePressedArray.push(Math.round(timePressed - startTime - BREAK_TIME));
         hitCounter++;
-        console.log("HIT " + Number(startTime + timeAppearArray[ball.counter] + BREAK_TIME - timePressed));
+        console.log("HIT " + Number(startTime + timeAppearArray[ball.counter] + BREAK_TIME - timePressed + 300));
         doneOnce = true;
         hitThisTime = true;
         keyPressed = 0;
-      } else if (keyPressed != 0 && timePressed + currentAllowedTimeDiff < startTime + timeAppearArray[ball.counter] + BREAK_TIME && !doneOnce) {
+      } else if (keyPressed != 0 && timePressed + currentAllowedTimeDiff < startTime + timeAppearArray[ball.counter] + BREAK_TIME + 300 && !doneOnce) {
         // console.log(timePressed + ALLOWABLE_TIME_DIFFERENCE);
         displayRectangle = true;
         keyPressArray.push(keyPressed);
         timePressedArray.push(Math.round(timePressed - startTime - BREAK_TIME));
-        console.log("MISS " + Number(startTime + timeAppearArray[ball.counter] + BREAK_TIME - timePressed));
+        console.log("MISS " + Number(startTime + timeAppearArray[ball.counter] + BREAK_TIME - timePressed + 300));
         missCounter++;
         doneOnce = true;
         hitThisTime = false;
@@ -227,7 +227,7 @@ function updateBall(ball) {
           noSound.play();
         }
         correctResponseArray.push(outcomesArray[ball.counter]);
-        correctTimeAppearArray.push(Math.round(timeAppearArray[ball.counter]));
+        correctTimeAppearArray.push(Math.round(timeAppearArray[ball.counter] + 300));
         blackBoxTimeArrayOrdered.push(currentAllowedTimeDiff);
         firstTimeRunningElse = false;
       }
