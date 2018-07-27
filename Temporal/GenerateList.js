@@ -24,16 +24,16 @@ Lines 1-8: The 3 numbers in each line add up to 1.
 var timesFile = 'http://jwzhang.com/game/Assets/Times.txt';
 /*
 Times.txt File Format:
-a va
-b vb
-c vc
-d vd
-e ve
-f vf
-g vg
-h vh
+a va ba
+b vb bb
+c vc bc
+d vd bd
+e ve be
+f vf bf
+g vg bg
+h vh bh
 
-where a through h are times in ms used as the mean times for the temporal test. va through vh are the variances
+where a through h are times in ms used as the mean times for the temporal test. va through vh are the variances. ba through bh are the box appear times
 a-d are for ball 0
 e-h are for ball 1
 */
@@ -69,21 +69,27 @@ function readFile(callback) {
 }
 
 function createOutcomes(linesFromFile, callback) { // Creates 2 lists: one list for which place (1,2, or 3) a ball is going. The other for which ball appears (1 or 2)
-  // Create list for which ball appears: either 0 or 1.
-  while (ones != 100 && zeroes != 100 && (ones/zeroes) != 1) {
-    ballAppearArray = [];
+  for (var a = 0; a < NUMBER_OF_DIFFERENT_PROBABILITIES/2; a++) {
     var ones = 0;
     var zeroes = 0;
-    for (var i = 0; i < NUMBER_OF_TOTAL_TRIES; i++) {
-      var num = Math.floor(Math.random() * 2);
-      if (num == 1) {
-        ones++;
-      } else {
-        zeroes++;
+    // Create list for which ball appears: either 0 or 1.
+    while (ones != 25 && zeroes != 25 && (ones/zeroes) != 1) {
+      var tempBallAppearArray = [];
+      ones = 0;
+      zeroes = 0;
+      for (var i = 0; i < 2*NUMBER_OF_TOTAL_TRIES/NUMBER_OF_DIFFERENT_PROBABILITIES; i++) {
+        var num = Math.floor(Math.random() * 2);
+        if (num == 1) {
+          ones++;
+        } else {
+          zeroes++;
+        }
+        tempBallAppearArray.push(num);
       }
-      ballAppearArray.push(num);
+      console.log("Ball Appear " + ones + " " + zeroes);
     }
-    console.log("Ball Appear " + ones + " " + zeroes);
+    ballAppearArray = ballAppearArray.concat(tempBallAppearArray);
+    console.log("end of for loop");
   }
 
   // Create list for which place a ball is going
@@ -160,7 +166,7 @@ function createOutcomes(linesFromFile, callback) { // Creates 2 lists: one list 
       console.log("Given Probabilities: " + finalProbabilitiesList[i] + " " + finalProbabilitiesList[i+1] + " " + finalProbabilitiesList[i+2]);
       console.log("True Probabilities: " + trueProb1 + " " + trueProb2 + " " + trueProb3);
       // console.log("T " + (Math.abs(finalProbabilitiesList[i] - trueProb1) > TOLERANCE));
-      redo =(Math.abs(finalProbabilitiesList[i] - trueProb1) > TOLERANCE) || (Math.abs(finalProbabilitiesList[i+1] - trueProb2) > TOLERANCE) || (Math.abs(finalProbabilitiesList[i+2] - trueProb3) > TOLERANCE);
+      redo = (Math.abs(finalProbabilitiesList[i] - trueProb1) > TOLERANCE) || (Math.abs(finalProbabilitiesList[i+1] - trueProb2) > TOLERANCE) || (Math.abs(finalProbabilitiesList[i+2] - trueProb3) > TOLERANCE);
       console.log(redo);
     }
     outcomesArray = outcomesArray.concat(tempOutcomesArray);
@@ -210,7 +216,7 @@ function generateTimesArray(callback) {
           numberGenerated = gaussianRand();
         }
         console.log("DONE " + numberGenerated);
-        timeAppearArray.push(numberGenerated);
+        timeAppearArray.push(Math.round(numberGenerated));
         blackBoxTimeArray.push(currentLineArray[2]);
       }
     }

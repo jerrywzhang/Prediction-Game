@@ -226,7 +226,7 @@ function updateBall(ball) {
           timePressedArray.push("x");
           noSound.play();
         }
-        correctResponseArray.push(outcomesArray[ball.counter]);
+        correctResponseArray.push(1);
         correctTimeAppearArray.push(Math.round(timeAppearArray[ball.counter] + 300));
         blackBoxTimeArrayOrdered.push(currentAllowedTimeDiff);
         firstTimeRunningElse = false;
