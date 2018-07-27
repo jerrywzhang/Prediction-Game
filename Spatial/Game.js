@@ -4,6 +4,7 @@
 var NUMBER_OF_TRIALS = 100; // this is per ball. Make sure it's 100 or less.
 var TIME_TO_WAIT = 1500; // in ms
 var BREAK_TIME = 600; // in ms
+var BEGINNING_BUFFER_TIME = 5000; // in ms
 
 // Code starts here
 var WINDOW_WIDTH = 600;
@@ -152,21 +153,35 @@ var displayRectangle = false;
 var run = true;
 var breakTimeBool = false;
 
+var firstTimeEver = true;
+
 var render = function() {
   context.fillStyle = context.createPattern(image, "no-repeat");
-  if (performance.now() - startTime < BREAK_TIME) {
-    breakTimeBool = true;
+  if (firstTimeEver && performance.now() - startTime > BEGINNING_BUFFER_TIME) {
+    firstTimeEver = false;
+    startTime = performance.now();
+    document.getElementById("go").innerHTML = " ";
+  }
+  if (startTime == 0 && performance.now() - startTime < BEGINNING_BUFFER_TIME) {
     context.fillRect(0, 0, width, height);
-    document.getElementById("go").innerHTML = "Status: Break!";
-    // keyPressed = 0;
-    // doneOnce = false;
-    // hitThisTime = false;
+    document.getElementById("go").innerHTML = "Status: The game will start in " + Math.round((BEGINNING_BUFFER_TIME - performance.now())/1000) + " seconds.";
+    console.log(performance.now() - startTime);
+    console.log("S" + startTime);
   } else {
-    breakTimeBool = false;
-    context.fillRect(0, 0, width, height);
-    player.render();
-    ball.render();
-    ball2.render();
+    if (performance.now() - startTime < BREAK_TIME) {
+      breakTimeBool = true;
+      context.fillRect(0, 0, width, height);
+      // document.getElementById("go").innerHTML = "Status: Break!";
+      // keyPressed = 0;
+      // doneOnce = false;
+      // hitThisTime = false;
+    } else {
+      breakTimeBool = false;
+      context.fillRect(0, 0, width, height);
+      player.render();
+      ball.render();
+      ball2.render();
+    }
   }
 };
 
@@ -183,7 +198,7 @@ function updateBall(ball) {
   if (run) {
     timeRemaining = TIME_TO_WAIT + BREAK_TIME - performance.now() + startTime;
     if (performance.now() - startTime < TIME_TO_WAIT + BREAK_TIME) { // wait before moving the ball and going to break time
-      document.getElementById("go").innerHTML = "Status: Press an arrow key in the next " + Math.round(timeRemaining/1000 + 0.5) + " seconds!";
+      // document.getElementById("go").innerHTML = "Status: Press an arrow key in the next " + Math.round(timeRemaining/1000 + 0.5) + " seconds!";
       // console.log(startTime);
       ball.x_speed = 0;
       ball.y_speed = 0;
@@ -210,7 +225,7 @@ function updateBall(ball) {
       }
       firstTimeRunningElse = true;
     } else {
-      document.getElementById("go").innerHTML = "Status: Don't press!";
+      // document.getElementById("go").innerHTML = "Status: Don't press!";
       if (firstTimeRunningElse) {
         if (hitThisTime) {
           // document.getElementById("hit").innerHTML = "Result: HIT";
@@ -311,7 +326,7 @@ function finishedAlert(ball) {
 }
 
 Ball.prototype.update = function(basket) {
-  if (this.id == ballAppearArray[arrayCounter] && !ranAlertAlready) {
+  if (this.id == ballAppearArray[arrayCounter] && !ranAlertAlready && !firstTimeEver) {
     updateBall(this);
   }
   if (doneWithGame_Ball0 && doneWithGame_Ball1) {

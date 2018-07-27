@@ -1,9 +1,9 @@
 // Author: Jerry Zhang
 
 // Variables
-var NUMBER_OF_TRIALS = 100; // this is per ball. Make sure it's 200 or less.
-var BREAK_TIME = 1000; // in ms
-// var ALLOWABLE_TIME_DIFFERENCE = 400; // in ms
+var NUMBER_OF_TRIALS = 5; // this is per ball
+var TIME_TO_WAIT = 2000; // in ms
+var BREAK_TIME = 600; // in ms
 var BEGINNING_BUFFER_TIME = 5000; // in ms
 
 // Code starts here
@@ -11,15 +11,15 @@ var WINDOW_WIDTH = 600;
 var WINDOW_HEIGHT = 600;
 var BALL_RADIUS = 25;
 
-var yesSound = new Audio('../Assets/Sounds/ding.mp3');
-var noSound = new Audio('../Assets/Sounds/buzzer.mp3')
+var yesSound = new Audio('./Assets/Sounds/ding.mp3');
+var noSound = new Audio('./Assets/Sounds/buzzer.mp3')
+
+var outcomesArray =   [1,2,3,1,2,3,1,3,2,1];
+var ballAppearArray = [0,1,0,0,1,1,1,0,1,0];
 
 var keyPressArray = [];
 var correctResponseArray = [];
-var correctTimeAppearArray = [];
-var timePressedArray = [];
-var blackBoxTimeArrayOrdered = [];
-var currentAllowedTimeDiff = 0;
+var keyPressTimeArray = [];
 
 var timePressed = 0;
 var keyPressed = 0;
@@ -84,7 +84,7 @@ canvas.width = width;
 canvas.height = height;
 var context = canvas.getContext('2d');
 var image = new Image();
-image.src = "../Assets/background.jpg";
+image.src = "./Assets/background.jpg";
 
 window.onload = function() {
   document.body.appendChild(canvas);
@@ -163,7 +163,6 @@ var render = function() {
   if (firstTimeEver && performance.now() - startTime > BEGINNING_BUFFER_TIME) {
     firstTimeEver = false;
     startTime = performance.now();
-    document.getElementById("go").innerHTML = " ";
   }
   if (startTime == 0 && performance.now() - startTime < BEGINNING_BUFFER_TIME) {
     context.fillRect(0, 0, width, height);
@@ -174,7 +173,10 @@ var render = function() {
     if (performance.now() - startTime < BREAK_TIME) {
       breakTimeBool = true;
       context.fillRect(0, 0, width, height);
-      // document.getElementById("go").innerHTML = "Status: Break!";
+      document.getElementById("go").innerHTML = "Status: Break!";
+      // keyPressed = 0;
+      // doneOnce = false;
+      // hitThisTime = false;
     } else {
       breakTimeBool = false;
       context.fillRect(0, 0, width, height);
@@ -196,29 +198,28 @@ function updateBall(ball) {
     run = true;
   }
   if (run) {
-    currentAllowedTimeDiff = blackBoxTimeAppearArray[ball.counter];
-    if (performance.now() - startTime < timeAppearArray[ball.counter] + BREAK_TIME + 300) { // wait before moving the ball and going to break time
-      // document.getElementById("go").innerHTML = "Status: Press one of the arrow keys right before you think the ball will move!";
+    timeRemaining = TIME_TO_WAIT + BREAK_TIME - performance.now() + startTime;
+    if (performance.now() - startTime < TIME_TO_WAIT + BREAK_TIME) { // wait before moving the ball and going to break time
+      document.getElementById("go").innerHTML = "Status: Press an arrow key in the next " + Math.round(timeRemaining/1000 + 0.5) + " seconds!";
       // console.log(startTime);
       ball.x_speed = 0;
       ball.y_speed = 0;
       ball.x = WINDOW_WIDTH/2;
       ball.y = WINDOW_HEIGHT/2 + 175/4;
-      if (keyPressed == 1 && !doneOnce && (timePressed + currentAllowedTimeDiff > startTime + timeAppearArray[ball.counter] + BREAK_TIME + 300)) {
+      if (keyPressed == outcomesArray[ball.counter] && !doneOnce) {
         displayRectangle = true;
         keyPressArray.push(keyPressed);
-        timePressedArray.push(Math.round(timePressed - startTime - BREAK_TIME));
+        keyPressTimeArray.push(Number(timePressed - startTime));
         hitCounter++;
-        console.log("HIT " + Number(startTime + timeAppearArray[ball.counter] + BREAK_TIME - timePressed + 300));
+        console.log("HIT");
         doneOnce = true;
         hitThisTime = true;
         keyPressed = 0;
-      } else if (keyPressed != 0 && timePressed + currentAllowedTimeDiff < startTime + timeAppearArray[ball.counter] + BREAK_TIME + 300 && !doneOnce) {
-        // console.log(timePressed + ALLOWABLE_TIME_DIFFERENCE);
+      } else if (keyPressed != 0 && !doneOnce) {
         displayRectangle = true;
         keyPressArray.push(keyPressed);
-        timePressedArray.push(Math.round(timePressed - startTime - BREAK_TIME));
-        console.log("MISS " + Number(startTime + timeAppearArray[ball.counter] + BREAK_TIME - timePressed + 300));
+        keyPressTimeArray.push(Number(timePressed - startTime));
+        console.log("MISS");
         missCounter++;
         doneOnce = true;
         hitThisTime = false;
@@ -226,7 +227,7 @@ function updateBall(ball) {
       }
       firstTimeRunningElse = true;
     } else {
-      // document.getElementById("go").innerHTML = "Status: Don't press!";
+      document.getElementById("go").innerHTML = "Status: Don't press!";
       if (firstTimeRunningElse) {
         if (hitThisTime) {
           // document.getElementById("hit").innerHTML = "Result: HIT";
@@ -237,34 +238,32 @@ function updateBall(ball) {
         } else {
           // document.getElementById("hit").innerHTML = "Result: NO INPUT";
           console.log("NO INPUT");
-          keyPressArray.push("x");
-          timePressedArray.push("x");
+          keyPressArray.push('x');
+          keyPressTimeArray.push('x');
           noSound.play();
         }
-        correctResponseArray.push(1);
-        correctTimeAppearArray.push(Math.round(timeAppearArray[ball.counter] + 300));
-        blackBoxTimeArrayOrdered.push(currentAllowedTimeDiff);
+        correctResponseArray.push(outcomesArray[ball.counter]);
         firstTimeRunningElse = false;
       }
-      // if (outcomesArray[ball.counter] == 1) {
-      ball.x_speed = 0;
-      ball.y_speed = -50;
-      // } else if (outcomesArray[ball.counter] == 2) {
-      //   ball.x_speed = -13;
-      //   ball.y_speed = -7;
-      // } else if (outcomesArray[ball.counter] == 3) {
-      //   ball.x_speed = 13;
-      //   ball.y_speed = -7;
-      // } else if (outcomesArray[ball.counter] == 999) {
-      //   ball.x_speed = 0;
-      //   ball.y_speed = 0;
-      // } else if (outcomesArray[ball.counter] == 888) {
-      //   ball.x_speed = 0;
-      //   ball.y_speed = 10;
-      // } else {
-      //   alert("There's an issue! " + outcomesArray[ball.counter] + " " + ball.counter);
-      //   console.log("There's an issue! " + outcomesArray[ball.counter] + " " + ball.counter);
-      // }
+      if (outcomesArray[ball.counter] == 1) {
+        ball.x_speed = 0;
+        ball.y_speed = -50;
+      } else if (outcomesArray[ball.counter] == 2) {
+        ball.x_speed = 43.3;
+        ball.y_speed = 25;
+      } else if (outcomesArray[ball.counter] == 3) {
+        ball.x_speed = -43.3;
+        ball.y_speed = 25;
+      } else if (outcomesArray[ball.counter] == 999) {
+        ball.x_speed = 0;
+        ball.y_speed = 0;
+      } else if (outcomesArray[ball.counter] == 888) {
+        ball.x_speed = 0;
+        ball.y_speed = 10;
+      } else {
+        alert("There's an issue! " + outcomesArray[ball.counter] + " " + ball.counter);
+        console.log("There's an issue! " + outcomesArray[ball.counter] + " " + ball.counter);
+      }
       ball.x += ball.x_speed;
       ball.y += ball.y_speed;
       if (ball.y < 50 || ball.x < 100 || ball.x > 600) {
@@ -313,9 +312,9 @@ function finishedAlert(ball) {
     var date = (today.getMonth() + 1) + '/' + today.getDate() + '/' + today.getFullYear();
     var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
     var dateAndTime = date + ' ' + time;
-    var generatedURL = postURL + "?IP=" + ipAddress + "&Time=" + dateAndTime + "&SorT=" + "Temporal" + "&Hit=" + hitCounter + "&Miss=" + missCounter + "&KeyPressArray=" + keyPressArray + "&CorrectKeyPressArray=" + correctResponseArray + "&BallAppearArray=" + ballAppearArray + "&TimePressArray=" + timePressedArray + "&CorrectTimeAppearArray=" + correctTimeAppearArray + "&AllowedTimeDifferences=" + blackBoxTimeArrayOrdered;
+    var generatedURL = postURL + "?IP=" + ipAddress + "&Time=" + dateAndTime + "&SorT=Spatial&Hit=" + hitCounter + "&Miss=" + missCounter + "&KeyPressArray=" + keyPressArray + "&CorrectKeyPressArray=" + correctResponseArray + "&BallAppearArray=" + ballAppearArray + "&TimePressArray=" + keyPressTimeArray;
     OpenInNewTabWinBrowser(generatedURL);
-    window.location.href = '../finished.html';
+    window.location.href = './part1.html';
   }
   if (ball.id == 1) {
     ball.counter = 2*NUMBER_OF_TRIALS;
@@ -329,7 +328,7 @@ function finishedAlert(ball) {
 }
 
 Ball.prototype.update = function(basket) {
-  if (this.id == ballAppearArray[arrayCounter] && !ranAlertAlready && !firstTimeEver) {
+  if (startTime != 0 && this.id == ballAppearArray[arrayCounter] && !ranAlertAlready) {
     updateBall(this);
   }
   if (doneWithGame_Ball0 && doneWithGame_Ball1) {
@@ -338,10 +337,9 @@ Ball.prototype.update = function(basket) {
 };
 
 Player.prototype.update = function() {
-  var timeDifference = performance.now() - timePressed;
+  // var timeDifference = performance.now() - timePressed;
   // console.log(displayRectangle);
-  // if (!displayRectangle || timeDifference > ALLOWABLE_TIME_DIFFERENCE) {
-  if (!displayRectangle || timeDifference > currentAllowedTimeDiff) {
+  if (!displayRectangle) {
     this.basket.move(888, 888, 0); // off the screen
     keyPressed = 0;
   } else if (keyPressed == 1) {
