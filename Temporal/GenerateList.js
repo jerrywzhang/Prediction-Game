@@ -2,7 +2,7 @@
 
 var NUMBER_OF_TOTAL_TRIES = 200;
 var NUMBER_OF_DIFFERENT_PROBABILITIES = 8;
-var TOLERANCE = 0.04;
+var TOLERANCE = 0.03;
 var probabilitiesFile = 'http://jwzhang.com/game/Assets/Probabilities.txt';
 /*
 Probabilities.txt File Format:
@@ -105,7 +105,7 @@ function createOutcomes(linesFromFile, callback) { // Creates 2 lists: one list 
           var a = Number(splitNums[num]);
           tempAdd = tempAdd + a;
           if (num == 2) {
-            if (tempAdd != 1) {
+            if (tempAdd < 0.998 || tempAdd > 1.001) {
               var lineNum = Number(i)+1;
               console.log("ERROR: Probability for line " +  lineNum + " doesn't add up to 1. It adds up to " + tempAdd + ".");
               alert("ERROR: Probability for line " + lineNum + " doesn't add up to 1. It adds up to " + tempAdd + ". Check the probabilities.txt file!");
@@ -135,7 +135,8 @@ function createOutcomes(linesFromFile, callback) { // Creates 2 lists: one list 
     var trueProb2 = -10;
     var trueProb3 = -10;
     var tempOutcomesArray = [];
-    while (Math.abs(finalProbabilitiesList[i] - trueProb1) > TOLERANCE) {
+    var redo = true;
+    while (redo) {
       tempOutcomesArray = [];
       var count1 = 0;
       var count2 = 0;
@@ -159,6 +160,8 @@ function createOutcomes(linesFromFile, callback) { // Creates 2 lists: one list 
       console.log("Given Probabilities: " + finalProbabilitiesList[i] + " " + finalProbabilitiesList[i+1] + " " + finalProbabilitiesList[i+2]);
       console.log("True Probabilities: " + trueProb1 + " " + trueProb2 + " " + trueProb3);
       // console.log("T " + (Math.abs(finalProbabilitiesList[i] - trueProb1) > TOLERANCE));
+      redo =(Math.abs(finalProbabilitiesList[i] - trueProb1) > TOLERANCE) || (Math.abs(finalProbabilitiesList[i+1] - trueProb2) > TOLERANCE) || (Math.abs(finalProbabilitiesList[i+2] - trueProb3) > TOLERANCE);
+      console.log(redo);
     }
     outcomesArray = outcomesArray.concat(tempOutcomesArray);
   }
