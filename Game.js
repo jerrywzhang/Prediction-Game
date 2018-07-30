@@ -1,9 +1,9 @@
 // Author: Jerry Zhang
 
 // Variables
-var NUMBER_OF_TRIALS = 5; // this is per ball
+var NUMBER_OF_TRIALS = 4; // this is per ball
 var TIME_TO_WAIT = 2000; // in ms
-var BREAK_TIME = 600; // in ms
+var BREAK_TIME = 1000; // in ms
 var BEGINNING_BUFFER_TIME = 5000; // in ms
 
 // Code starts here
@@ -14,8 +14,8 @@ var BALL_RADIUS = 25;
 var yesSound = new Audio('./Assets/Sounds/ding.mp3');
 var noSound = new Audio('./Assets/Sounds/buzzer.mp3')
 
-var outcomesArray =   [1,2,3,1,2,3,1,3,2,1];
-var ballAppearArray = [0,1,0,0,1,1,1,0,1,0];
+var outcomesArray =   [1,2,3,1,2,3,1,3,2];
+var ballAppearArray = [0,1,0,0,1,1,1,0,1];
 
 var keyPressArray = [];
 var correctResponseArray = [];
@@ -161,10 +161,12 @@ var firstTimeEver = true;
 var render = function() {
   context.fillStyle = context.createPattern(image, "no-repeat");
   if (firstTimeEver && performance.now() - startTime > BEGINNING_BUFFER_TIME) {
+    breakTimeBool = false;
     firstTimeEver = false;
     startTime = performance.now();
   }
   if (startTime == 0 && performance.now() - startTime < BEGINNING_BUFFER_TIME) {
+    breakTimeBool = true;
     context.fillRect(0, 0, width, height);
     document.getElementById("go").innerHTML = "Status: The game will start in " + Math.round((BEGINNING_BUFFER_TIME - performance.now())/1000) + " seconds.";
     console.log(performance.now() - startTime);
@@ -183,6 +185,9 @@ var render = function() {
       player.render();
       ball.render();
       ball2.render();
+      if (!newKeyPressed) {
+        document.getElementById("hit").innerHTML = "Result: Nothing Pressed Yet";
+      }
     }
   }
 };
@@ -201,12 +206,20 @@ function updateBall(ball) {
     timeRemaining = TIME_TO_WAIT + BREAK_TIME - performance.now() + startTime;
     if (performance.now() - startTime < TIME_TO_WAIT + BREAK_TIME) { // wait before moving the ball and going to break time
       document.getElementById("go").innerHTML = "Status: Press an arrow key in the next " + Math.round(timeRemaining/1000 + 0.5) + " seconds!";
+
       // console.log(startTime);
       ball.x_speed = 0;
       ball.y_speed = 0;
       ball.x = WINDOW_WIDTH/2;
       ball.y = WINDOW_HEIGHT/2 + 175/4;
       if (keyPressed == outcomesArray[ball.counter] && !doneOnce) {
+        if (keyPressed == 1) {
+          document.getElementById("hit").innerHTML = "Result: Pressed UP arrow";
+        } else if (keyPressed == 2) {
+          document.getElementById("hit").innerHTML = "Result: Pressed RIGHT arrow";
+        } else if (keyPressed == 3) {
+          document.getElementById("hit").innerHTML = "Result: Pressed LEFT arrow";
+        }
         displayRectangle = true;
         keyPressArray.push(keyPressed);
         keyPressTimeArray.push(Number(timePressed - startTime));
@@ -216,6 +229,13 @@ function updateBall(ball) {
         hitThisTime = true;
         keyPressed = 0;
       } else if (keyPressed != 0 && !doneOnce) {
+        if (keyPressed == 1) {
+          document.getElementById("hit").innerHTML = "Result: Pressed UP arrow";
+        } else if (keyPressed == 2) {
+          document.getElementById("hit").innerHTML = "Result: Pressed RIGHT arrow";
+        } else if (keyPressed == 3) {
+          document.getElementById("hit").innerHTML = "Result: Pressed LEFT arrow";
+        }
         displayRectangle = true;
         keyPressArray.push(keyPressed);
         keyPressTimeArray.push(Number(timePressed - startTime));
@@ -230,13 +250,13 @@ function updateBall(ball) {
       document.getElementById("go").innerHTML = "Status: Don't press!";
       if (firstTimeRunningElse) {
         if (hitThisTime) {
-          // document.getElementById("hit").innerHTML = "Result: HIT";
+          document.getElementById("hit").innerHTML = "Result: HIT";
           yesSound.play();
         } else if (doneOnce) {
-          // document.getElementById("hit").innerHTML = "Result: MISS";
+          document.getElementById("hit").innerHTML = "Result: MISS";
           noSound.play();
         } else {
-          // document.getElementById("hit").innerHTML = "Result: NO INPUT";
+          document.getElementById("hit").innerHTML = "Result: NO INPUT";
           console.log("NO INPUT");
           keyPressArray.push('x');
           keyPressTimeArray.push('x');

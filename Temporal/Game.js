@@ -161,11 +161,13 @@ var firstTimeEver = true;
 var render = function() {
   context.fillStyle = context.createPattern(image, "no-repeat");
   if (firstTimeEver && performance.now() - startTime > BEGINNING_BUFFER_TIME) {
+    breakTimeBool = false;
     firstTimeEver = false;
     startTime = performance.now();
     document.getElementById("go").innerHTML = " ";
   }
   if (startTime == 0 && performance.now() - startTime < BEGINNING_BUFFER_TIME) {
+    breakTimeBool = true;
     context.fillRect(0, 0, width, height);
     document.getElementById("go").innerHTML = "Status: The game will start in " + Math.round((BEGINNING_BUFFER_TIME - performance.now())/1000) + " seconds.";
     console.log(performance.now() - startTime);
@@ -377,7 +379,7 @@ function saveVariableToFile(name, variable) {
 }
 
 function OpenInNewTabWinBrowser(url) {
-  console.log(window.open(url, '_blank', "width=300, height=200"));
+  console.log(window.open(url, '_blank', "width=300, height=100"));
   console.log("Opening " + url + " in new window.");
 }
 
