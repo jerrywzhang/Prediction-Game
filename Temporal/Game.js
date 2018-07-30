@@ -377,7 +377,7 @@ function saveVariableToFile(name, variable) {
 }
 
 function OpenInNewTabWinBrowser(url) {
-  console.log(window.open(url, '_blank'));
+  console.log(window.open(url, '_blank', "width=300, height=200"));
   console.log("Opening " + url + " in new window.");
 }
 
