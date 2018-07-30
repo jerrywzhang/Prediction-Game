@@ -5,7 +5,7 @@
   <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
   <meta name="author" content="Jerry Zhang">
   <link rel="icon" type="image/png" href="favicon.png" sizes="196x196" />
-  
+
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=UA-73890448-1"></script>
   <script>
@@ -50,7 +50,7 @@
     </div>
   </div>
   <script>
-    popup = window.open('./popup.html', '_blank');
+    popup = window.open('./popup.html', '_blank', "width=300, height=400");
     setTimeout(function () {
       if (!popup || popup.closed || typeof popup.closed == 'undefined' || parseInt(popup.outerWidth) == 0) {
           alert('Please turn off pop-up blocker (click the link in the 2nd instruction) and reload.');
