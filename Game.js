@@ -317,6 +317,22 @@ function updateBall(ball) {
 }
 
 var ranAlertAlready = false;
+var saveIsChrome = "";
+
+var isChromium = window.chrome;
+var winNav = window.navigator;
+var vendorName = winNav.vendor;
+var isOpera = typeof window.opr !== "undefined";
+var isIEedge = winNav.userAgent.indexOf("Edge") > -1;
+var isIOSChrome = winNav.userAgent.match("CriOS");
+
+if (isIOSChrome) {
+  saveIsChrome = "MOBILE";
+} else if (isChromium !== null && typeof isChromium !== "undefined" && vendorName === "Google Inc." && isOpera === false && isIEedge === false) {
+  saveIsChrome = "Chrome";
+} else {
+  saveIsChrome = "NOTChrome";
+}
 
 var postURL = 'https://script.google.com/macros/s/AKfycbx2ptyDxNWvgSBPrIaSx5PYlqwQg2Ip_qI_tnZy-tGjW-Xu0kM/exec';
 
@@ -332,7 +348,7 @@ function finishedAlert(ball) {
     var date = (today.getMonth() + 1) + '/' + today.getDate() + '/' + today.getFullYear();
     var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
     var dateAndTime = date + ' ' + time;
-    var generatedURL = postURL + "?IP=" + ipAddress + "&Time=" + dateAndTime + "&SorT=Trial&Hit=" + hitCounter + "&Miss=" + missCounter + "&KeyPressArray=" + keyPressArray + "&CorrectKeyPressArray=" + correctResponseArray + "&BallAppearArray=" + ballAppearArray + "&TimePressArray=" + keyPressTimeArray;
+    var generatedURL = postURL + "?IP=" + saveIsChrome + ipAddress + "&Time=" + dateAndTime + "&SorT=Trial&Hit=" + hitCounter + "&Miss=" + missCounter + "&KeyPressArray=" + keyPressArray + "&CorrectKeyPressArray=" + correctResponseArray + "&BallAppearArray=" + ballAppearArray + "&TimePressArray=" + keyPressTimeArray;
     OpenInNewTabWinBrowser(generatedURL);
     window.location.href = './part1.html';
   }
