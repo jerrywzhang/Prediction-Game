@@ -1,6 +1,6 @@
 // Author: Jerry Zhang
 
-var arraysFile = 'http://jwzhang.com/game/Temporal/Arrays.txt';
+var arraysFile = 'https://jwzhang.com/game/Temporal/Arrays.txt';
 /*
 Arrays.txt File Format:
 x,y,z,a,b,....Nx,y,z,a,b,c....

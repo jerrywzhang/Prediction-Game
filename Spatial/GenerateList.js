@@ -3,7 +3,7 @@
 var NUMBER_OF_TOTAL_TRIES = 200;
 var NUMBER_OF_DIFFERENT_PROBABILITIES = 8;
 var TOLERANCE = 0.03;
-var probabilitiesFile = 'http://jwzhang.com/game/Assets/Probabilities.txt';
+var probabilitiesFile = 'https://jwzhang.com/game/Assets/Probabilities.txt';
 /*
 Probabilities.txt File Format:
 
