@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Prediction Game</title>
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  <link rel="icon" type="image/png" href="favicon.png" sizes="196x196" />
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-73890448-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-73890448-1');
+  </script>
+</head>
+
+<body>
+  <div class="w3-container w3-pale-blue">
+    <h1>Prediction Game</h1>
+  </div>
+
+  <div class="w3-container w3-padding-16">
+    <h3>In this game, you are a chipmunk digging around underground in search of food.</h3>
+    <h3>You need to be able to get to the right place at the right time in order to eat.</h3>
+    <h5>Before we begin, please read the instructions on how to play the game.</h5>
+    <ul class="w3-ul w3-padding-16">
+      <li>1. IMPORTANT: Make sure you are using Google Chrome on fullscreen in INCOGNITO mode.</li>
+      <li>2. IMPORTANT: Enable Popups! Click <img src="./Assets/popup_blocked.jpg"> (in the top right corner of your browser) then click "Always allow pop-ups from https://jwzhang.com".
+        <a href="./Assets/popups.jpg" target="new">If you don't see that icon, click here.</a>
+      </li>
+      <li>3. Turn on your audio!</li>
+      <li>4. Close all other open applications. The game may lag if you don't do this.</li>
+      <li>5. Make sure you get to the end screen that will say "You are finished!" on it.</li>
+      <li>6. Use the arrow keys to select where you think the food will go. Make sure you click PRIOR to the food moving.</li>
+      <li>7. After you click start, the game will start. Pay close attention!</li>
+      <li>8. Try your best and have fun!</li>
+    </ul>
+    <a href="./Game.html" class="w3-button w3-block w3-teal">Begin Practice Mode</a>
+  </div>
+
+  <div class="w3-cell-row  w3-pale-blue w3-cell-middle">
+    <div class="w3-container w3-cell w3-mobile">
+    </div>
+    <div class="w3-container w3-cell w3-mobile w3-right-align">
+      <p><a href="./credits.html">Licenses and Credits</a><p>
+    </div>
+  </div>
+  <script>
+    popup = window.open('./popup.html', '_blank', "width=300, height=400");
+    setTimeout(function () {
+      if (!popup || popup.closed || typeof popup.closed == 'undefined' || parseInt(popup.outerWidth) == 0) {
+          alert('Please turn off pop-up blocker (click the link in the 2nd instruction) and reload.');
+      }
+      else {
+          popup.focus();
+      }
+    }, 500);
+    var w = window.innerWidth;
+    var h = window.innerHeight;
+    if (w < 650 || h < 650) {
+      alert('Please increase your window size!');
+    }
+  </script>
+
+  <script>
+    var ip = '';
+    var http = new XMLHttpRequest();
+    http.onreadystatechange = function() {
+      if (http.readyState == 4 && http.status == 200){
+        ip = http.responseText;
+        console.log(ip);
+        if (ip == null) {
+          alert("Please disable your ad blocker. It stops your results from being submitted.");
+        }
+      } else if (http.readyState == 4 && http.status != 200) {
+        alert("Please disable your ad blocker. It stops your results from being submitted.");
+      }
+    }
+    http.open("GET", 'https://api.ipify.org/?format=txt', true);
+    http.send(null);
+  </script>
+</body>
+</html>
