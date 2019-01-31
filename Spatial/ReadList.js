@@ -1,6 +1,6 @@
 // Author: Jerry Zhang
 
-var arraysFile = 'https://jwzhang.com/game/Spatial/Arrays.txt';
+var arraysFile = 'https://gist.githubusercontent.com/thejwzhang/6f96e7d702581026a82014cef3f64484/raw/051ac965973abd9c2f49247111ec7cbde96538f8/OneBallArray.txt';
 /*
 Arrays.txt File Format:
 x,y,z,a,b,....Nx,y,z,a,b,c....
@@ -12,8 +12,8 @@ Second array: 0 or 1 for which ball
 */
 
 // IF YOU CHANGE THESE TWO VARIABLES, MAKE SURE YOU CHANGE THEM IN GenerateList.js AS WELL
-var NUMBER_OF_TOTAL_TRIES = 200;
-var NUMBER_OF_DIFFERENT_PROBABILITIES = 8;
+var NUMBER_OF_TOTAL_TRIES = 240;
+var NUMBER_OF_DIFFERENT_PROBABILITIES = 3;
 
 readFile(createOutcomes);
 
@@ -41,7 +41,6 @@ function readFile(callback) {
 
 function createOutcomes(callback) { // Converts strings to numbers
   pushToArray(0, outcomesArray);
-  pushToArray(1, ballAppearArray);
 
   done = true;
   callback(done);
