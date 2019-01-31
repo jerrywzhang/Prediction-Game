@@ -11,7 +11,6 @@
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-
     gtag('config', 'UA-73890448-1');
   </script>
 </head>
@@ -31,10 +30,10 @@
         <a href="./Assets/popups.jpg" target="new">If you don't see that icon, click here.</a>
       </li>
       <li>3. Turn on your audio!</li>
-      <li>4. Close all other open applications. The game may lag if you don't do this.</li>
-      <li>5. Make sure you get to the end screen that will say "You are finished!" on it.</li>
-      <li>6. Use the arrow keys to select where you think the food will go. Make sure you click PRIOR to the food moving.</li>
-      <li>7. After you click start, the game will start. Pay close attention!</li>
+      <li>4. Make sure you get to the end screen that will say "You are finished!" on it.</li>
+      <li>5. Use the arrow keys to select where you think the food will go.</li>
+      <li>6. After you click start, the game will start. Pay close attention!</li>
+      <li>7. Hit the spacebar prior to each trial to start.</li>
       <li>8. Try your best and have fun!</li>
     </ul>
     <a href="./Game.html" class="w3-button w3-block w3-teal">Begin Practice Mode</a>
@@ -68,7 +67,7 @@
     var ip = '';
     var http = new XMLHttpRequest();
     http.onreadystatechange = function() {
-      if (http.readyState == 4 && http.status == 200){
+      if (http.readyState == 4 && http.status == 200) {
         ip = http.responseText;
         console.log(ip);
         if (ip == null) {

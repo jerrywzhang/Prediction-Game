@@ -4,7 +4,7 @@
 var NUMBER_OF_TRIALS = 100; // this is per ball. Make sure it's 200 or less.
 var BREAK_TIME = 1000; // in ms
 // var ALLOWABLE_TIME_DIFFERENCE = 400; // in ms
-var BEGINNING_BUFFER_TIME = 5000; // in ms
+// var BEGINNING_BUFFER_TIME = 5000; // in ms
 
 // Code starts here
 var WINDOW_WIDTH = 600;
@@ -25,36 +25,49 @@ var timePressed = 0;
 var keyPressed = 0;
 var lastKeyPressed = 0;
 var newKeyPressed = false;
+var trialStart = false;
+
+var spaceBarPressed = false;
 
 var firstTimeRunningElse = true;
 
 getIP();
 
 document.addEventListener("keydown", function(event) {
-  if (!breakTimeBool) {
+  // if (!breakTimeBool) {
     var key = event.keyCode;
+    console.log(key);
     if (!newKeyPressed) {
       if (lastKeyPressed == key) {
         keyPressed = 0;
         console.log("HELD DOWN");
+      } else if (key == 32) {
+        console.log("SPACE");
+        trialStart = true;
+        // newKeyPressed = true;
+        spaceBarPressed = true;
+        startTime = performance.now();
       } else if (key == 49 || key == 97 || key == 38 || key == 40) {
         timePressed = performance.now();
         console.log("1 Pressed");
         keyPressed = 1;
         newKeyPressed = true;
         displayRectangle = true;
+        trialStart = false;
       } else if (key == 50 || key == 98 || key == 39) {
         timePressed = performance.now();
         console.log("2 Pressed");
         keyPressed = 2;
         newKeyPressed = true;
         displayRectangle = true;
+        trialStart = false;
       } else if (key == 51 || key == 99 || key == 37) {
         timePressed = performance.now();
         console.log("3 Pressed");
         keyPressed = 3;
         newKeyPressed = true;
         displayRectangle = true;
+        trialStart = false;
       } else {
         // console.log("Key Number " + key + " Pressed");
         keyPressed = 0;
@@ -62,7 +75,7 @@ document.addEventListener("keydown", function(event) {
       }
       lastKeyPressed = key;
     }
-  }
+  // }
 });
 
 document.addEventListener("keyup", function(event) {
@@ -160,20 +173,21 @@ var firstTimeEver = true;
 
 var render = function() {
   context.fillStyle = context.createPattern(image, "no-repeat");
-  if (firstTimeEver && performance.now() - startTime > BEGINNING_BUFFER_TIME) {
-    breakTimeBool = false;
-    firstTimeEver = false;
-    startTime = performance.now();
-    document.getElementById("go").innerHTML = " ";
-  }
-  if (startTime == 0 && performance.now() - startTime < BEGINNING_BUFFER_TIME) {
-    breakTimeBool = true;
-    context.fillRect(0, 0, width, height);
-    document.getElementById("go").innerHTML = "Status: The game will start in " + Math.round((BEGINNING_BUFFER_TIME - performance.now())/1000) + " seconds.";
-    console.log(performance.now() - startTime);
-    console.log("S" + startTime);
-  } else {
-    if (performance.now() - startTime < BREAK_TIME) {
+  // if (firstTimeEver && performance.now() - startTime > BEGINNING_BUFFER_TIME) {
+  //   breakTimeBool = false;
+  //   firstTimeEver = false;
+  //   startTime = performance.now();
+  //   document.getElementById("go").innerHTML = " ";
+  // }
+  // if (startTime == 0 && performance.now() - startTime < BEGINNING_BUFFER_TIME) {
+  //   breakTimeBool = true;
+  //   context.fillRect(0, 0, width, height);
+  //   document.getElementById("go").innerHTML = "Status: The game will start in " + Math.round((BEGINNING_BUFFER_TIME - performance.now())/1000) + " seconds.";
+  //   console.log(performance.now() - startTime);
+  //   console.log("S" + startTime);
+  // } else {
+  console.log(trialStart);
+    if (!trialStart) {
       breakTimeBool = true;
       context.fillRect(0, 0, width, height);
       // document.getElementById("go").innerHTML = "Status: Break!";
@@ -184,7 +198,7 @@ var render = function() {
       ball.render();
       ball2.render();
     }
-  }
+  // }
 };
 
 function updateBall(ball) {
@@ -197,16 +211,23 @@ function updateBall(ball) {
   } else {
     run = true;
   }
-  if (run) {
+  console.log("EEEEEEEEEEEE");
+  if (run && trialStart) {
+    console.log("ugh");
     currentAllowedTimeDiff = blackBoxTimeAppearArray[ball.counter];
-    if (performance.now() - startTime < timeAppearArray[ball.counter] + BREAK_TIME + 300) { // wait before moving the ball and going to break time
+    if (spaceBarPressed) {
+      console.log("huh");
+    if (trialStart) {
+      console.log("what");
+    // if (performance.now() - startTime < timeAppearArray[ball.counter] + BREAK_TIME + 300) { // wait before moving the ball and going to break time
       // document.getElementById("go").innerHTML = "Status: Press one of the arrow keys right before you think the ball will move!";
       // console.log(startTime);
       ball.x_speed = 0;
       ball.y_speed = 0;
       ball.x = WINDOW_WIDTH/2;
       ball.y = WINDOW_HEIGHT/2 + 175/4;
-      if (keyPressed == 1 && !doneOnce && (timePressed + currentAllowedTimeDiff > startTime + timeAppearArray[ball.counter] + BREAK_TIME + 300)) {
+      // if (keyPressed == 1 && !doneOnce && (timePressed + currentAllowedTimeDiff > startTime + timeAppearArray[ball.counter] + BREAK_TIME + 300)) {
+      if (keyPressed == 1 && !doneOnce) {
         displayRectangle = true;
         keyPressArray.push(keyPressed);
         timePressedArray.push(Math.round(timePressed - startTime - BREAK_TIME));
@@ -215,7 +236,8 @@ function updateBall(ball) {
         doneOnce = true;
         hitThisTime = true;
         keyPressed = 0;
-      } else if (keyPressed != 0 && timePressed + currentAllowedTimeDiff < startTime + timeAppearArray[ball.counter] + BREAK_TIME + 300 && !doneOnce) {
+      // } else if (keyPressed != 0 && timePressed + currentAllowedTimeDiff < startTime + timeAppearArray[ball.counter] + BREAK_TIME + 300 && !doneOnce) {
+      } else if (keyPressed != 0 && !doneOnce) {
         // console.log(timePressed + ALLOWABLE_TIME_DIFFERENCE);
         displayRectangle = true;
         keyPressArray.push(keyPressed);
@@ -276,8 +298,9 @@ function updateBall(ball) {
         arrayCounter++;
         doneOnce = false;
         hitThisTime = false;
-        startTime = performance.now();
+        trialStart = false;
         newKeyPressed = false;
+        spaceBarPressed = false;
         if (ball.id == 0 && ball.counter < NUMBER_OF_TRIALS - 1) {
           ball.counter++;
         } else if (ball.counter == NUMBER_OF_TRIALS - 1) {
@@ -291,6 +314,7 @@ function updateBall(ball) {
         displayRectangle = false;
       }
     }
+  }
   } else {
     arrayCounter++;
     keyPressed = 0;
@@ -331,7 +355,9 @@ function finishedAlert(ball) {
 }
 
 Ball.prototype.update = function(basket) {
-  if (this.id == ballAppearArray[arrayCounter] && !ranAlertAlready && !firstTimeEver) {
+  console.log("UPDATE");
+  if (this.id == ballAppearArray[arrayCounter] && !ranAlertAlready) {
+    console.log("MEME");
     updateBall(this);
   }
   if (doneWithGame_Ball0 && doneWithGame_Ball1) {
